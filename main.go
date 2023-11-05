@@ -1,28 +1,43 @@
 package main
 
 import (
-	"errors"
 	"fmt"
-	ical "github.com/arran4/golang-ical"
 	"log"
 	"net/http"
 	"os"
+
+	ical "github.com/arran4/golang-ical"
 )
 
 func main() {
-	http.HandleFunc("/", convert)
-	log.Fatal(http.ListenAndServe(":80", nil))
-}
-
-func convert(w http.ResponseWriter, r *http.Request) {
-	icsURL := os.Getenv("ICAL_CONVERTER_ICS_URL")
-	if icsURL == "" {
-		log.Println(errors.New("failed to get env: ICAL_CONVERTER_ICS_URL"))
-		http.Error(w, "", http.StatusInternalServerError)
-		return
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "80"
 	}
 
-	resp, err := http.Get(icsURL)
+	icsURL := os.Getenv("ICAL_CONVERTER_ICS_URL")
+	if icsURL == "" {
+		log.Fatal("failed to get env: ICAL_CONVERTER_ICS_URL")
+	}
+
+	service := newConvertService(icsURL)
+
+	http.Handle("/", &service)
+	log.Fatal(http.ListenAndServe(":"+port, nil))
+}
+
+type convertService struct {
+	icsURL string
+}
+
+func newConvertService(icsURL string) convertService {
+	return convertService{
+		icsURL: icsURL,
+	}
+}
+
+func (c *convertService) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	resp, err := http.Get(c.icsURL)
 	if err != nil {
 		log.Println(fmt.Errorf("failed to get ical: %w", err))
 		http.Error(w, "", http.StatusInternalServerError)
@@ -31,15 +46,17 @@ func convert(w http.ResponseWriter, r *http.Request) {
 
 	cal, err := ical.ParseCalendar(resp.Body)
 	if err != nil {
-		log.Println(fmt.Errorf("failed to parse calendar", err))
+		log.Println(fmt.Errorf("failed to parse calendar: %w", err))
 		http.Error(w, "", http.StatusInternalServerError)
 		return
 	}
 
-	for i, component := range cal.Components {
+	newcal := ical.NewCalendar()
+	newcal.CalendarProperties = cal.CalendarProperties
+	for _, component := range cal.Components {
 		var id string
 		for _, prop := range component.UnknownPropertiesIANAProperties() {
-			if prop.IANAToken == "UID" {
+			if prop.IANAToken == string(ical.PropertyUid) {
 				id = prop.Value
 				break
 			}
@@ -47,42 +64,34 @@ func convert(w http.ResponseWriter, r *http.Request) {
 
 		event := ical.NewEvent(id)
 		for _, prop := range component.UnknownPropertiesIANAProperties() {
-			// var params []ical.PropertyParameter
-			// for _, param := range prop.ICalParameters {
-			// 	params = append(params, ical.KeyValues{})
-			// }
+			var params []ical.PropertyParameter
+			for k, v := range prop.ICalParameters {
+				params = append(params, &ical.KeyValues{Key: k, Value: v})
+			}
+
 			switch prop.IANAToken {
-			case "SUMMARY":
-				event.SetSummary(prop.Value)
-			case "DTSTAMP":
-				event.SetProperty(ical.ComponentPropertyDtstamp, prop.Value)
-			case "DTSTART":
-				event.SetProperty(ical.ComponentPropertyDtStart, prop.Value)
-				// "DTSTAMP"
-				// "LAST-MODIFIED"
-				// "SEQUENCE"
-				// "DESCRIPTION"
-				// "STATUS"
-				// "PERCENT-COMPLETE"
-				// "COMPLETED"
-				// "CREATED"
-				// "DTSTART"
-				// "DUE"
-				// "X-2DOAPP-METADATA"
-				// "X-2DOAPP-SYNC-IMAGE"
-				// "X-2DOAPP-SYNC-AUDIO"
-				// "X-2DOAPP-AUDIO-DURATION"
+			case string(ical.PropertyUid):
+				continue
+			case string(ical.PropertyPercentComplete):
+				continue
+			case string(ical.PropertyDue):
+				event.SetProperty(ical.ComponentPropertyDtEnd, prop.Value, params...)
+			default:
+				event.SetProperty(ical.ComponentProperty(prop.IANAToken), prop.Value, params...)
 			}
 		}
 
-		// fmt.Println("==================================================")
-		// fmt.Println(component)
-		// fmt.Println("--------------------------------------------------")
-		// fmt.Println(event.Serialize())
-		cal.Components[i] = event
+		if event.GetProperty(ical.ComponentPropertyDtStart) == nil {
+			continue
+		}
+		if event.GetProperty(ical.ComponentProperty(ical.PropertyCompleted)) != nil {
+			continue
+		}
+
+		newcal.Components = append(newcal.Components, event)
 	}
 
-	if _, err := fmt.Fprint(w, cal.Serialize()); err != nil {
+	if _, err := fmt.Fprint(w, newcal.Serialize()); err != nil {
 		log.Println(fmt.Errorf("failed to write response: %v", err))
 		http.Error(w, "", http.StatusInternalServerError)
 		return
