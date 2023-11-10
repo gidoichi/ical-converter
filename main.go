@@ -74,7 +74,17 @@ func (c *convertService) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				continue
 			case string(ical.PropertyPercentComplete):
 				continue
+			case string(ical.PropertyDtstart):
+				params = append(params, &ical.KeyValues{
+					Key:   string(ical.ParameterTzid),
+					Value: []string{"Asia/Tokyo"},
+				})
+				event.SetProperty(ical.ComponentPropertyDtStart, prop.Value, params...)
 			case string(ical.PropertyDue):
+				params = append(params, &ical.KeyValues{
+					Key:   string(ical.ParameterTzid),
+					Value: []string{"Asia/Tokyo"},
+				})
 				event.SetProperty(ical.ComponentPropertyDtEnd, prop.Value, params...)
 			default:
 				event.SetProperty(ical.ComponentProperty(prop.IANAToken), prop.Value, params...)
