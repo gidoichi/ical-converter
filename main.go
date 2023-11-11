@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 
 	ical "github.com/arran4/golang-ical"
 )
@@ -19,20 +20,25 @@ func main() {
 	if icsURL == "" {
 		log.Fatal("failed to get env: ICAL_CONVERTER_ICS_URL")
 	}
-
-	service := newConvertService(icsURL)
+	loc, err := time.LoadLocation("Asia/Tokyo")
+	if err != nil {
+		log.Fatal("failed to parse location: %w", err)
+	}
+	service := newConvertService(icsURL, *loc)
 
 	http.Handle("/", &service)
 	log.Fatal(http.ListenAndServe(":"+port, nil))
 }
 
 type convertService struct {
-	icsURL string
+	icsURL   string
+	timeZone time.Location
 }
 
-func newConvertService(icsURL string) convertService {
+func newConvertService(icsURL string, timeZone time.Location) convertService {
 	return convertService{
-		icsURL: icsURL,
+		icsURL:   icsURL,
+		timeZone: timeZone,
 	}
 }
 
@@ -57,7 +63,7 @@ func (c *convertService) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		var id string
 		for _, prop := range component.UnknownPropertiesIANAProperties() {
 			if prop.IANAToken == string(ical.PropertyUid) {
-				id = prop.Value
+				id = prop.Value + "@nextcloud.gidoichi.f5.si"
 				break
 			}
 		}
@@ -74,18 +80,20 @@ func (c *convertService) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				continue
 			case string(ical.PropertyPercentComplete):
 				continue
+			case string(ical.PropertyStatus):
+				continue
 			case string(ical.PropertyDtstart):
-				params = append(params, &ical.KeyValues{
-					Key:   string(ical.ParameterTzid),
-					Value: []string{"Asia/Tokyo"},
-				})
-				event.SetProperty(ical.ComponentPropertyDtStart, prop.Value, params...)
+				if t, err := time.ParseInLocation("20060102T150405", prop.Value, &c.timeZone); err == nil {
+					event.SetProperty(ical.ComponentPropertyDtStart, t.UTC().Format("20060102T150405Z"), params...)
+				} else {
+					event.SetProperty(ical.ComponentPropertyDtStart, prop.Value, params...)
+				}
 			case string(ical.PropertyDue):
-				params = append(params, &ical.KeyValues{
-					Key:   string(ical.ParameterTzid),
-					Value: []string{"Asia/Tokyo"},
-				})
-				event.SetProperty(ical.ComponentPropertyDtEnd, prop.Value, params...)
+				if t, err := time.ParseInLocation("20060102T150405", prop.Value, &c.timeZone); err == nil {
+					event.SetProperty(ical.ComponentPropertyDtEnd, t.UTC().Format("20060102T150405Z"), params...)
+				} else {
+					event.SetProperty(ical.ComponentPropertyDtEnd, prop.Value, params...)
+				}
 			default:
 				event.SetProperty(ical.ComponentProperty(prop.IANAToken), prop.Value, params...)
 			}
