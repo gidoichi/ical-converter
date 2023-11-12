@@ -81,25 +81,25 @@ VTODO:
 				params = append(params, &ical.KeyValues{Key: k, Value: v})
 			}
 
-			switch prop.IANAToken {
-			case string(ical.PropertyUid):
+			switch ical.Property(prop.IANAToken) {
+			case ical.PropertyUid:
 				continue
-			case string(ical.PropertyCompleted):
+			case ical.PropertyCompleted:
 				continue
-			case string(ical.PropertyPercentComplete):
+			case ical.PropertyPercentComplete:
 				continue
-			case string(ical.PropertyStatus):
-				switch prop.Value {
-				case string(ical.ObjectStatusCancelled), string(ical.ObjectStatusCompleted):
+			case ical.PropertyStatus:
+				switch ical.ObjectStatus(prop.Value) {
+				case ical.ObjectStatusCancelled, ical.ObjectStatusCompleted:
 					continue VTODO
 				}
-			case string(ical.PropertyDtstart):
+			case ical.PropertyDtstamp, ical.PropertyDtstart:
 				if t, err := time.ParseInLocation("20060102T150405", prop.Value, &c.timeZone); err == nil {
-					event.SetProperty(ical.ComponentPropertyDtStart, t.UTC().Format("20060102T150405Z"), params...)
+					event.SetProperty(ical.ComponentProperty(prop.IANAToken), t.UTC().Format("20060102T150405Z"), params...)
 				} else {
-					event.SetProperty(ical.ComponentPropertyDtStart, prop.Value, params...)
+					event.SetProperty(ical.ComponentProperty(prop.IANAToken), prop.Value, params...)
 				}
-			case string(ical.PropertyDue):
+			case ical.PropertyDue:
 				if t, err := time.ParseInLocation("20060102T150405", prop.Value, &c.timeZone); err == nil {
 					event.SetProperty(ical.ComponentPropertyDtEnd, t.UTC().Format("20060102T150405Z"), params...)
 				} else {
