@@ -23,11 +23,8 @@ func main() {
 	if icsURL == "" {
 		log.Fatal("failed to get env: ICAL_CONVERTER_ICS_URL")
 	}
-	loc, err := time.LoadLocation("Asia/Tokyo")
-	if err != nil {
-		log.Fatal("failed to parse location: %w", err)
-	}
-	service := newConvertService(icsURL, *loc)
+	tz := time.FixedZone("JST", +9*60*60)
+	service := newConvertService(icsURL, *tz)
 
 	http.Handle("/", &service)
 	log.Fatal(http.ListenAndServe(":"+port, nil))
@@ -50,14 +47,14 @@ func (c *convertService) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	resp, err := http.Get(c.icsURL)
 	if err != nil {
-		log.Println(fmt.Errorf("failed to get ical: %w", err))
+		log.Println("failed to get ical: ", err)
 		http.Error(w, "", http.StatusInternalServerError)
 		return
 	}
 
 	cal, err := ical.ParseCalendar(resp.Body)
 	if err != nil {
-		log.Println(fmt.Errorf("failed to parse calendar: %w", err))
+		log.Println("failed to parse calendar: ", err)
 		http.Error(w, "", http.StatusInternalServerError)
 		return
 	}
@@ -130,7 +127,7 @@ VTODO:
 	}
 
 	if _, err := fmt.Fprint(w, newcal.Serialize()); err != nil {
-		log.Println(fmt.Errorf("failed to write response: %v", err))
+		log.Println("failed to write response: ", err)
 		http.Error(w, "", http.StatusInternalServerError)
 		return
 	}
