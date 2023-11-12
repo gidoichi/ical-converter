@@ -13,5 +13,5 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - uses: docker/build-push-action@v5
         with:
-          push: false
+          push: true
           tags: ${{ github.repository }}:${{ github.ref_name }}
