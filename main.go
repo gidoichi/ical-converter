@@ -59,17 +59,18 @@ func (c *convertService) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	newcal := ical.NewCalendar()
 	newcal.CalendarProperties = cal.CalendarProperties
-	for _, component := range cal.Components {
+VTODO:
+	for _, todo := range cal.Components {
 		var id string
-		for _, prop := range component.UnknownPropertiesIANAProperties() {
+		for _, prop := range todo.UnknownPropertiesIANAProperties() {
 			if prop.IANAToken == string(ical.PropertyUid) {
-				id = prop.Value + "@nextcloud.gidoichi.f5.si"
+				id = prop.Value
 				break
 			}
 		}
 
 		event := ical.NewEvent(id)
-		for _, prop := range component.UnknownPropertiesIANAProperties() {
+		for _, prop := range todo.UnknownPropertiesIANAProperties() {
 			var params []ical.PropertyParameter
 			for k, v := range prop.ICalParameters {
 				params = append(params, &ical.KeyValues{Key: k, Value: v})
@@ -78,10 +79,15 @@ func (c *convertService) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			switch prop.IANAToken {
 			case string(ical.PropertyUid):
 				continue
+			case string(ical.PropertyCompleted):
+				continue
 			case string(ical.PropertyPercentComplete):
 				continue
 			case string(ical.PropertyStatus):
-				continue
+				switch prop.Value {
+				case string(ical.ObjectStatusCancelled), string(ical.ObjectStatusCompleted):
+					continue VTODO
+				}
 			case string(ical.PropertyDtstart):
 				if t, err := time.ParseInLocation("20060102T150405", prop.Value, &c.timeZone); err == nil {
 					event.SetProperty(ical.ComponentPropertyDtStart, t.UTC().Format("20060102T150405Z"), params...)
@@ -100,9 +106,6 @@ func (c *convertService) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		}
 
 		if event.GetProperty(ical.ComponentPropertyDtStart) == nil {
-			continue
-		}
-		if event.GetProperty(ical.ComponentProperty(ical.PropertyCompleted)) != nil {
 			continue
 		}
 
