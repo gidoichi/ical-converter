@@ -1,0 +1,10 @@
+name: Test
+on: push
+jobs:
+  build-container:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          push: false
