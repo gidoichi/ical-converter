@@ -93,7 +93,7 @@ VTODO:
 				case ical.ObjectStatusCancelled, ical.ObjectStatusCompleted:
 					continue VTODO
 				}
-			case ical.PropertyDtstamp, ical.PropertyDtstart:
+			case ical.PropertyDtstamp, ical.PropertyDtstart, ical.PropertyLastModified:
 				if t, err := time.ParseInLocation("20060102T150405", prop.Value, &c.timeZone); err == nil {
 					event.SetProperty(ical.ComponentProperty(prop.IANAToken), t.UTC().Format("20060102T150405Z"), params...)
 				} else {
