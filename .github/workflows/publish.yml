@@ -14,4 +14,4 @@ jobs:
       - uses: docker/build-push-action@v5
         with:
           push: false
-          tags: ${{ github.GITHUB_ACTION_REPOSITORY }}:${{ github.GITHUB_REF_NAME }}
+          tags: ${{ github.repository }}:${{ github.ref_name }}
