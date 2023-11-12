@@ -1,10 +1,13 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
+	"net/url"
 	"os"
+	"strings"
 	"time"
 
 	ical "github.com/arran4/golang-ical"
@@ -43,6 +46,8 @@ func newConvertService(icsURL string, timeZone time.Location) convertService {
 }
 
 func (c *convertService) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	log.Printf("%+v", r)
+
 	resp, err := http.Get(c.icsURL)
 	if err != nil {
 		log.Println(fmt.Errorf("failed to get ical: %w", err))
@@ -105,6 +110,18 @@ VTODO:
 			}
 		}
 
+		if start, err := getStartDateFrom2doappMetadata(event); start != nil && err == nil {
+			if start.Hour() == 0 && start.Minute() == 0 && start.Second() == 0 {
+				event.SetProperty(ical.ComponentPropertyDtStart, start.Format("20060102"), &ical.KeyValues{
+					Key:   "VALUE",
+					Value: []string{"DATE"},
+				})
+			} else {
+				event.SetProperty(ical.ComponentPropertyDtStart, start.Format("20060102T150405Z"))
+			}
+		} else if err != nil {
+			log.Println(err)
+		}
 		if event.GetProperty(ical.ComponentPropertyDtStart) == nil {
 			continue
 		}
@@ -117,4 +134,31 @@ VTODO:
 		http.Error(w, "", http.StatusInternalServerError)
 		return
 	}
+}
+
+func getStartDateFrom2doappMetadata(event *ical.VEvent) (*time.Time, error) {
+	prop := event.GetProperty("X-2DOAPP-METADATA")
+	if prop == nil {
+		return nil, nil
+	}
+
+	raw := prop.Value
+	content := strings.TrimSuffix(strings.TrimPrefix(raw, "<2Do Meta>"), "</2Do Meta>\\n")
+	content, err := url.QueryUnescape(content)
+	if err != nil {
+		return nil, fmt.Errorf("failed to unescape percent-encoding: %w", err)
+	}
+
+	var parsed struct {
+		StartDate int64
+	}
+	if err := json.Unmarshal([]byte(content), &parsed); err != nil {
+		return nil, fmt.Errorf("failed to unmarshall json: %w", err)
+	}
+	if parsed.StartDate == 0 {
+		return nil, nil
+	}
+
+	utc := time.Unix(parsed.StartDate, 0).UTC()
+	return &utc, nil
 }
