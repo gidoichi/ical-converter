@@ -23,7 +23,7 @@ func main() {
 	if icsURL == "" {
 		log.Fatal("failed to get env: ICAL_CONVERTER_ICS_URL")
 	}
-	tz := time.FixedZone("JST", +9*60*60)
+	tz := time.FixedZone("JST", int((+9 * time.Hour).Seconds()))
 	service := newConvertService(icsURL, *tz)
 
 	http.Handle("/", &service)
@@ -107,14 +107,14 @@ VTODO:
 			}
 		}
 
-		if start, err := getStartDateFrom2doappMetadata(event); start != nil && err == nil {
+		if start, err := c.getStartDateFrom2doappMetadata(event); start != nil && err == nil {
 			if start.Hour() == 0 && start.Minute() == 0 && start.Second() == 0 {
 				event.SetProperty(ical.ComponentPropertyDtStart, start.Format("20060102"), &ical.KeyValues{
 					Key:   "VALUE",
 					Value: []string{"DATE"},
 				})
 			} else {
-				event.SetProperty(ical.ComponentPropertyDtStart, start.Format("20060102T150405Z"))
+				event.SetProperty(ical.ComponentPropertyDtStart, start.UTC().Format("20060102T150405Z"))
 			}
 		} else if err != nil {
 			log.Println(err)
@@ -133,7 +133,7 @@ VTODO:
 	}
 }
 
-func getStartDateFrom2doappMetadata(event *ical.VEvent) (*time.Time, error) {
+func (c *convertService) getStartDateFrom2doappMetadata(event *ical.VEvent) (*time.Time, error) {
 	prop := event.GetProperty("X-2DOAPP-METADATA")
 	if prop == nil {
 		return nil, nil
@@ -156,6 +156,8 @@ func getStartDateFrom2doappMetadata(event *ical.VEvent) (*time.Time, error) {
 		return nil, nil
 	}
 
-	utc := time.Unix(parsed.StartDate, 0).UTC()
-	return &utc, nil
+	t := time.Unix(parsed.StartDate, 0).In(&c.timeZone)
+	_, offset := t.Zone()
+	t = t.Add(-time.Second * time.Duration(offset))
+	return &t, nil
 }
