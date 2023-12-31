@@ -5,6 +5,6 @@ RUN go mod download && go mod verify
 COPY . .
 RUN go build -v -o /usr/local/bin/app ./...
 
-FROM alpine:3.18.4
+FROM alpine:3.19.0
 COPY --from=builder /usr/local/bin/app /usr/local/bin/ical-converter
 CMD ["ical-converter"]
