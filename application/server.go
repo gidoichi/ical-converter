@@ -5,12 +5,9 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"reflect"
 	"time"
 
-	ical "github.com/arran4/golang-ical"
 	"github.com/gidoichi/ical-converter/application/datasource"
-	"github.com/gidoichi/ical-converter/entity/component"
 	"github.com/gidoichi/ical-converter/infrastructure"
 	"github.com/gidoichi/ical-converter/usecase"
 	"github.com/prometheus/client_golang/prometheus"
@@ -32,81 +29,45 @@ func main() {
 	repository := infrastructure.NewTwoDoRepository(*tz)
 	dataSource := datasource.NewHTTPICalDataSource(icsURL)
 	converter := usecase.NewConverter(repository)
-	service := newConvertService(icsURL, dataSource, &converter)
+	convertService := NewConvertService(&converter)
+	server := newServer(convertService, dataSource)
 
 	http.Handle("/", promhttp.InstrumentHandlerCounter(
 		promauto.NewCounterVec(prometheus.CounterOpts{
 			Name: "http_requests_total",
 		}, []string{"code"}),
-		&service,
+		&server,
 	))
 
 	http.Handle("/metrics", promhttp.Handler())
 	log.Fatal(http.ListenAndServe(":"+port, nil))
 }
 
-type convertService struct {
-	icsURL     string
-	dataSource usecase.DataSource
-	converter  usecase.Converter
+type server struct {
+	convertService convertService
+	dataSource     usecase.DataSource
 }
 
-func newConvertService(icsURL string, dataSource usecase.DataSource, converter usecase.Converter) convertService {
-	return convertService{
-		icsURL:     icsURL,
-		dataSource: dataSource,
-		converter:  converter,
+func newServer(convertService convertService, dataSource usecase.DataSource) server {
+	return server{
+		convertService: convertService,
+		dataSource:     dataSource,
 	}
 }
 
-func (c *convertService) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (s *server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	log.Printf("%+v", r)
 
-	cal, err := c.converter.Convert(c.dataSource)
+	serialized, err := s.convertService.Convert(s.dataSource)
 	if err != nil {
 		log.Println("failed to convert: ", err)
 		http.Error(w, "", http.StatusInternalServerError)
 		return
 	}
 
-	newCal := component.NewCalendarFrom(*cal)
-	for _, event := range cal.Components {
-		var vevent *ical.VEvent
-		var ok bool
-		if vevent, ok = event.(*ical.VEvent); !ok {
-			log.Printf("component type not supported: %s", reflect.TypeOf(event))
-			continue
-		}
-
-		if vevent.GetProperty(ical.ComponentPropertyDtStart) == nil {
-			continue
-		}
-
-		status := vevent.GetProperty(ical.ComponentPropertyStatus).Value
-		switch ical.ObjectStatus(status) {
-		case ical.ObjectStatusTentative, ical.ObjectStatusConfirmed:
-			vevent.ComponentBase = c.RemoveProperty(vevent.ComponentBase, ical.ComponentPropertyStatus)
-		case ical.ObjectStatusCancelled, ical.ObjectStatusCompleted:
-			continue
-		}
-
-		newCal.AddVEvent(vevent)
-	}
-
-	if _, err := fmt.Fprint(w, newCal.Serialize()); err != nil {
+	if _, err := fmt.Fprint(w, serialized); err != nil {
 		log.Println("failed to write response: ", err)
 		http.Error(w, "", http.StatusInternalServerError)
 		return
 	}
-}
-
-func (s *convertService) RemoveProperty(component ical.ComponentBase, property ical.ComponentProperty) ical.ComponentBase {
-	for i := 0; i < len(component.Properties); i++ {
-		if ical.ComponentProperty(component.Properties[i].IANAToken) == property {
-			component.Properties = append(component.Properties[:i], component.Properties[i+1:]...)
-			i--
-		}
-	}
-
-	return component
 }
