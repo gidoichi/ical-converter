@@ -9,6 +9,7 @@ import (
 	"time"
 
 	ical "github.com/arran4/golang-ical"
+	"github.com/gidoichi/ical-converter/application/datasource"
 	"github.com/gidoichi/ical-converter/entity/component"
 	"github.com/gidoichi/ical-converter/infrastructure"
 	"github.com/gidoichi/ical-converter/usecase"
@@ -29,7 +30,7 @@ func main() {
 	}
 	tz := time.FixedZone("JST", int((+9 * time.Hour).Seconds()))
 	repository := infrastructure.NewTwoDoRepository(*tz)
-	dataSource := NewHTTPICalDataSource(icsURL)
+	dataSource := datasource.NewHTTPICalDataSource(icsURL)
 	converter := usecase.NewConverter(repository)
 	service := newConvertService(icsURL, dataSource, &converter)
 
@@ -42,30 +43,6 @@ func main() {
 
 	http.Handle("/metrics", promhttp.Handler())
 	log.Fatal(http.ListenAndServe(":"+port, nil))
-}
-
-type httpICalDataSource struct {
-	url string
-}
-
-func NewHTTPICalDataSource(url string) httpICalDataSource {
-	return httpICalDataSource{
-		url: url,
-	}
-}
-
-func (d httpICalDataSource) GetICal() (*ical.Calendar, error) {
-	resp, err := http.Get(d.url)
-	if err != nil {
-		return nil, fmt.Errorf("failed to get ical: %w", err)
-	}
-
-	cal, err := ical.ParseCalendar(resp.Body)
-	if err != nil {
-		return nil, fmt.Errorf("failed to parse calendar: %w", err)
-	}
-
-	return cal, nil
 }
 
 type convertService struct {
