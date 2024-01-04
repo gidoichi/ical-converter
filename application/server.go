@@ -14,6 +14,9 @@ import (
 	"github.com/gidoichi/ical-converter/domain/component"
 	"github.com/gidoichi/ical-converter/domain/converter"
 	"github.com/gidoichi/ical-converter/domain/valuetype"
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promauto"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 func main() {
@@ -29,7 +32,14 @@ func main() {
 	tz := time.FixedZone("JST", int((+9 * time.Hour).Seconds()))
 	service := newConvertService(icsURL, *tz)
 
-	http.Handle("/", &service)
+	http.Handle("/", promhttp.InstrumentHandlerCounter(
+		promauto.NewCounterVec(prometheus.CounterOpts{
+			Name: "http_requests_total",
+		}, []string{"code"}),
+		&service,
+	))
+
+	http.Handle("/metrics", promhttp.Handler())
 	log.Fatal(http.ListenAndServe(":"+port, nil))
 }
 
