@@ -5,6 +5,7 @@ go 1.21.5
 require (
 	github.com/arran4/golang-ical v0.2.3
 	github.com/prometheus/client_golang v1.17.0
+	go.uber.org/mock v0.4.0
 )
 
 require (
