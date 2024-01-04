@@ -1,61 +1,43 @@
-package main
+package application
 
 import (
 	"fmt"
 	"log"
 	"net/http"
-	"os"
-	"time"
 
-	"github.com/gidoichi/ical-converter/application/datasource"
-	"github.com/gidoichi/ical-converter/infrastructure"
 	"github.com/gidoichi/ical-converter/usecase"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
-func main() {
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "80"
-	}
+type Server struct {
+	convertService convertService
+	dataSource     usecase.DataSource
+	port           string
+}
 
-	icsURL := os.Getenv("ICAL_CONVERTER_ICS_URL")
-	if icsURL == "" {
-		log.Fatal("failed to get env: ICAL_CONVERTER_ICS_URL")
+func NewServer(convertService convertService, dataSource usecase.DataSource, port string) Server {
+	return Server{
+		convertService: convertService,
+		dataSource:     dataSource,
+		port:           port,
 	}
-	tz := time.FixedZone("JST", int((+9 * time.Hour).Seconds()))
-	repository := infrastructure.NewTwoDoRepository(*tz)
-	dataSource := datasource.NewHTTPICalDataSource(icsURL)
-	converter := usecase.NewConverter(repository)
-	convertService := NewConvertService(&converter)
-	server := newServer(convertService, dataSource)
+}
 
+func (s *Server) Run() {
 	http.Handle("/", promhttp.InstrumentHandlerCounter(
 		promauto.NewCounterVec(prometheus.CounterOpts{
 			Name: "http_requests_total",
 		}, []string{"code"}),
-		&server,
+		s,
 	))
 
 	http.Handle("/metrics", promhttp.Handler())
-	log.Fatal(http.ListenAndServe(":"+port, nil))
+	log.Fatal(http.ListenAndServe(":"+s.port, nil))
 }
 
-type server struct {
-	convertService convertService
-	dataSource     usecase.DataSource
-}
-
-func newServer(convertService convertService, dataSource usecase.DataSource) server {
-	return server{
-		convertService: convertService,
-		dataSource:     dataSource,
-	}
-}
-
-func (s *server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	log.Printf("%+v", r)
 
 	serialized, err := s.convertService.Convert(s.dataSource)

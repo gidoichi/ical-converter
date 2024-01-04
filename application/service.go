@@ -1,4 +1,4 @@
-package main
+package application
 
 import (
 	"log"
@@ -41,7 +41,7 @@ func (s *convertService) Convert(dataSource usecase.DataSource) (string, error) 
 		status := vevent.GetProperty(ical.ComponentPropertyStatus).Value
 		switch ical.ObjectStatus(status) {
 		case ical.ObjectStatusTentative, ical.ObjectStatusConfirmed:
-			vevent.ComponentBase = s.RemoveProperty(vevent.ComponentBase, ical.ComponentPropertyStatus)
+			vevent.ComponentBase = s.removeProperty(vevent.ComponentBase, ical.ComponentPropertyStatus)
 		case ical.ObjectStatusCancelled, ical.ObjectStatusCompleted:
 			continue
 		}
@@ -52,7 +52,7 @@ func (s *convertService) Convert(dataSource usecase.DataSource) (string, error) 
 	return newCal.Serialize(), nil
 }
 
-func (s *convertService) RemoveProperty(component ical.ComponentBase, property ical.ComponentProperty) ical.ComponentBase {
+func (s *convertService) removeProperty(component ical.ComponentBase, property ical.ComponentProperty) ical.ComponentBase {
 	for i := 0; i < len(component.Properties); i++ {
 		if ical.ComponentProperty(component.Properties[i].IANAToken) == property {
 			component.Properties = append(component.Properties[:i], component.Properties[i+1:]...)
