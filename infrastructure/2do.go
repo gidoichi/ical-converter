@@ -9,9 +9,8 @@ import (
 	"time"
 
 	ical "github.com/arran4/golang-ical"
-	dcomponent "github.com/gidoichi/ical-converter/domain/component"
-	"github.com/gidoichi/ical-converter/domain/valuetype"
 	"github.com/gidoichi/ical-converter/entity/component"
+	"github.com/gidoichi/ical-converter/entity/valuetype"
 	"github.com/gidoichi/ical-converter/usecase"
 )
 
@@ -33,7 +32,7 @@ func (r *twoDoRepository) GetICal(source usecase.DataSource) (cal *ical.Calendar
 
 	cal = component.NewCalendarFrom(*rawCal)
 	for _, rawTodo := range rawCal.Components {
-		todo := dcomponent.Todo{
+		todo := component.Todo{
 			ComponentBase: ical.ComponentBase{
 				Components: rawTodo.SubComponents(),
 				Properties: rawTodo.UnknownPropertiesIANAProperties(),
@@ -77,7 +76,7 @@ func (r *twoDoRepository) GetICal(source usecase.DataSource) (cal *ical.Calendar
 	return cal, nil
 }
 
-func (c *twoDoRepository) getStartDateFrom2doappMetadata(todo *dcomponent.Todo) (*time.Time, error) {
+func (c *twoDoRepository) getStartDateFrom2doappMetadata(todo *component.Todo) (*time.Time, error) {
 	prop := todo.GetProperty("X-2DOAPP-METADATA")
 	if prop == nil {
 		return nil, nil

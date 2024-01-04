@@ -2,7 +2,7 @@ package component
 
 import (
 	ical "github.com/arran4/golang-ical"
-	"github.com/gidoichi/ical-converter/domain/valuetype"
+	"github.com/gidoichi/ical-converter/entity/valuetype"
 )
 
 type Todo ical.VTodo
