@@ -22,36 +22,11 @@ func TestConvert(t *testing.T) {
 			&ical.VTodo{
 				ComponentBase: ical.ComponentBase{
 					Properties: []ical.IANAProperty{
-						{
-							BaseProperty: ical.BaseProperty{
-								IANAToken: "UID",
-								Value:     "1",
-							},
-						},
-						{
-							BaseProperty: ical.BaseProperty{
-								IANAToken: "SUMMARY",
-								Value:     "test",
-							},
-						},
-						{
-							BaseProperty: ical.BaseProperty{
-								IANAToken: "COMPLETED",
-								Value:     "20070707T100000Z",
-							},
-						},
-						{
-							BaseProperty: ical.BaseProperty{
-								IANAToken: "STATUS",
-								Value:     "COMPLETED",
-							},
-						},
-						{
-							BaseProperty: ical.BaseProperty{
-								IANAToken: "DUE",
-								Value:     "20070707T100000Z",
-							},
-						},
+						{BaseProperty: ical.BaseProperty{IANAToken: "UID", Value: "1"}},
+						{BaseProperty: ical.BaseProperty{IANAToken: "SUMMARY", Value: "test"}},
+						{BaseProperty: ical.BaseProperty{IANAToken: "COMPLETED", Value: "20070707T100000Z"}},
+						{BaseProperty: ical.BaseProperty{IANAToken: "STATUS", Value: "COMPLETED"}},
+						{BaseProperty: ical.BaseProperty{IANAToken: "DUE", Value: "20070707T100000Z"}},
 					},
 				},
 			},

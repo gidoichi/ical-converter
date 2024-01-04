@@ -30,7 +30,7 @@ func (s *convertService) Convert(dataSource usecase.DataSource) (string, error) 
 		var vevent *ical.VEvent
 		var ok bool
 		if vevent, ok = event.(*ical.VEvent); !ok {
-			log.Printf("component type not supported: %s", reflect.TypeOf(event))
+			log.Printf("unexpected component type: %s", reflect.TypeOf(event))
 			continue
 		}
 
@@ -38,12 +38,13 @@ func (s *convertService) Convert(dataSource usecase.DataSource) (string, error) 
 			continue
 		}
 
-		status := vevent.GetProperty(ical.ComponentPropertyStatus).Value
-		switch ical.ObjectStatus(status) {
-		case ical.ObjectStatusTentative, ical.ObjectStatusConfirmed:
-			vevent.ComponentBase = s.removeProperty(vevent.ComponentBase, ical.ComponentPropertyStatus)
-		case ical.ObjectStatusCancelled, ical.ObjectStatusCompleted:
-			continue
+		if status := vevent.GetProperty(ical.ComponentPropertyStatus); status != nil {
+			switch ical.ObjectStatus(status.Value) {
+			case ical.ObjectStatusTentative, ical.ObjectStatusConfirmed:
+				vevent.ComponentBase = s.removeProperty(vevent.ComponentBase, ical.ComponentPropertyStatus)
+			case ical.ObjectStatusCancelled, ical.ObjectStatusCompleted:
+				continue
+			}
 		}
 
 		newCal.AddVEvent(vevent)

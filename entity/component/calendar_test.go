@@ -13,21 +13,13 @@ func TestNewCalendarFrom(t *testing.T) {
 
 	base := ical.NewCalendar()
 	base.CalendarProperties = []ical.CalendarProperty{
-		{
-			BaseProperty: ical.BaseProperty{
-				IANAToken: "calendar",
-			},
-		},
+		{BaseProperty: ical.BaseProperty{IANAToken: "calendar"}},
 	}
 	base.Components = []ical.Component{
 		&ical.VEvent{
 			ComponentBase: ical.ComponentBase{
 				Properties: []ical.IANAProperty{
-					{
-						BaseProperty: ical.BaseProperty{
-							IANAToken: "component",
-						},
-					},
+					{BaseProperty: ical.BaseProperty{IANAToken: "component"}},
 				},
 			},
 		},
