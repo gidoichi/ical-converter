@@ -1,6 +1,8 @@
 package usecase_test
 
 import (
+	"log"
+	"reflect"
 	"testing"
 
 	ical "github.com/arran4/golang-ical"
@@ -11,6 +13,7 @@ import (
 
 func TestConvert(t *testing.T) {
 	// Given
+
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 	repository := mock_usecase.NewMockRepository(ctrl)
@@ -59,15 +62,23 @@ func TestConvert(t *testing.T) {
 	converter := usecase.NewConverter(repository)
 
 	// When
+
 	cal, err := converter.Convert(dataSource)
 
 	// Then
+
+	log.Println("VTODO is converted to VEVENT")
 	if err != nil {
 		t.Errorf("unexpected error: %s", err)
 	}
 	if len(cal.Components) != 1 {
 		t.Errorf("unexpected calendar: %s", cal.Serialize())
 	}
+	if _, ok := cal.Components[0].(*ical.VEvent); !ok {
+		t.Errorf("unexpected component type: %s", reflect.TypeOf(cal.Components[0]))
+	}
+
+	log.Println("Properties are converted to corresponding properties")
 	if len(cal.Components[0].UnknownPropertiesIANAProperties()) != 4 {
 		t.Errorf("unexpected properties: %s", cal.Serialize())
 	}
@@ -113,6 +124,7 @@ func TestConvert_UnknownComponent(t *testing.T) {
 	_, err := converter.Convert(dataSource)
 
 	// Then
+	log.Println("error occurred")
 	if err == nil {
 		t.Error("expected error, but not")
 	}
