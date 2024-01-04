@@ -1,19 +1,17 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
-	"net/url"
 	"os"
-	"strings"
+	"reflect"
 	"time"
 
 	ical "github.com/arran4/golang-ical"
-	"github.com/gidoichi/ical-converter/domain/component"
-	"github.com/gidoichi/ical-converter/domain/converter"
-	"github.com/gidoichi/ical-converter/domain/valuetype"
+	"github.com/gidoichi/ical-converter/entity/component"
+	"github.com/gidoichi/ical-converter/infrastructure"
+	"github.com/gidoichi/ical-converter/usecase"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
@@ -30,7 +28,10 @@ func main() {
 		log.Fatal("failed to get env: ICAL_CONVERTER_ICS_URL")
 	}
 	tz := time.FixedZone("JST", int((+9 * time.Hour).Seconds()))
-	service := newConvertService(icsURL, *tz)
+	repository := infrastructure.NewTwoDoRepository(*tz)
+	dataSource := NewHTTPICalDataSource(icsURL)
+	converter := usecase.NewConverter(repository)
+	service := newConvertService(icsURL, dataSource, &converter)
 
 	http.Handle("/", promhttp.InstrumentHandlerCounter(
 		promauto.NewCounterVec(prometheus.CounterOpts{
@@ -43,130 +44,92 @@ func main() {
 	log.Fatal(http.ListenAndServe(":"+port, nil))
 }
 
-type convertService struct {
-	icsURL   string
-	timeZone time.Location
+type httpICalDataSource struct {
+	url string
 }
 
-func newConvertService(icsURL string, timeZone time.Location) convertService {
+func NewHTTPICalDataSource(url string) httpICalDataSource {
+	return httpICalDataSource{
+		url: url,
+	}
+}
+
+func (d httpICalDataSource) GetICal() (*ical.Calendar, error) {
+	resp, err := http.Get(d.url)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get ical: %w", err)
+	}
+
+	cal, err := ical.ParseCalendar(resp.Body)
+	if err != nil {
+		return nil, fmt.Errorf("failed to parse calendar: %w", err)
+	}
+
+	return cal, nil
+}
+
+type convertService struct {
+	icsURL     string
+	dataSource usecase.DataSource
+	converter  usecase.Converter
+}
+
+func newConvertService(icsURL string, dataSource usecase.DataSource, converter usecase.Converter) convertService {
 	return convertService{
-		icsURL:   icsURL,
-		timeZone: timeZone,
+		icsURL:     icsURL,
+		dataSource: dataSource,
+		converter:  converter,
 	}
 }
 
 func (c *convertService) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	log.Printf("%+v", r)
 
-	resp, err := http.Get(c.icsURL)
+	cal, err := c.converter.Convert(c.dataSource)
 	if err != nil {
-		log.Println("failed to get ical: ", err)
+		log.Println("failed to convert: ", err)
 		http.Error(w, "", http.StatusInternalServerError)
 		return
 	}
 
-	cal, err := ical.ParseCalendar(resp.Body)
-	if err != nil {
-		log.Println("failed to parse calendar: ", err)
-		http.Error(w, "", http.StatusInternalServerError)
-		return
-	}
-
-	newcal := ical.NewCalendar()
-	newcal.CalendarProperties = cal.CalendarProperties
-	for _, rawTodo := range cal.Components {
-		// infrastructure logic
-
-		todo := component.Todo{
-			ComponentBase: ical.ComponentBase{
-				Components: rawTodo.SubComponents(),
-				Properties: rawTodo.UnknownPropertiesIANAProperties(),
-			},
-		}
-		if start, err := c.getStartDateFrom2doappMetadata(&todo); start != nil && err == nil {
-			start := start.UTC()
-			if start.Hour() == 0 && start.Minute() == 0 && start.Second() == 0 {
-				todo.SetDateProperty(ical.ComponentPropertyDtStart, valuetype.NewDate(start))
-			} else {
-				todo.SetDateTimeProperty(ical.ComponentPropertyDtStart, valuetype.NewDateTime(start))
-			}
-		} else if err != nil {
-			log.Println(err)
-		}
-
-		for _, targetProp := range []ical.Property{
-			ical.PropertyDtstamp,
-			ical.PropertyDtstart,
-			ical.PropertyLastModified,
-			ical.PropertyDue,
-		} {
-			prop := todo.GetProperty(ical.ComponentProperty(targetProp))
-			if prop == nil {
-				continue
-			}
-
-			if t, err := time.ParseInLocation("20060102T150405", prop.Value, &c.timeZone); err == nil {
-				todo.SetDateTimeProperty(ical.ComponentProperty(targetProp), valuetype.NewDateTime(t))
-			} else {
-				var params []ical.PropertyParameter
-				for k, v := range prop.ICalParameters {
-					params = append(params, &ical.KeyValues{Key: k, Value: v})
-				}
-				todo.SetProperty(ical.ComponentProperty(targetProp), prop.Value, params...)
-			}
-		}
-
-		// business logic
-
-		event := converter.Convert(todo)
-
-		// application logic
-
-		if event.GetProperty(ical.ComponentPropertyDtStart) == nil {
+	newCal := component.NewCalendarFrom(*cal)
+	for _, event := range cal.Components {
+		var vevent *ical.VEvent
+		var ok bool
+		if vevent, ok = event.(*ical.VEvent); !ok {
+			log.Printf("component type not supported: %s", reflect.TypeOf(event))
 			continue
 		}
-		status := event.GetProperty(ical.ComponentPropertyStatus).Value
+
+		if vevent.GetProperty(ical.ComponentPropertyDtStart) == nil {
+			continue
+		}
+
+		status := vevent.GetProperty(ical.ComponentPropertyStatus).Value
 		switch ical.ObjectStatus(status) {
 		case ical.ObjectStatusTentative, ical.ObjectStatusConfirmed:
-			event.RemoveProperty(ical.ComponentPropertyStatus)
+			vevent.ComponentBase = c.RemoveProperty(vevent.ComponentBase, ical.ComponentPropertyStatus)
 		case ical.ObjectStatusCancelled, ical.ObjectStatusCompleted:
 			continue
 		}
 
-		vevent := ical.VEvent(*event)
-		newcal.AddVEvent(&vevent)
+		newCal.AddVEvent(vevent)
 	}
 
-	if _, err := fmt.Fprint(w, newcal.Serialize()); err != nil {
+	if _, err := fmt.Fprint(w, newCal.Serialize()); err != nil {
 		log.Println("failed to write response: ", err)
 		http.Error(w, "", http.StatusInternalServerError)
 		return
 	}
 }
 
-func (c *convertService) getStartDateFrom2doappMetadata(todo *component.Todo) (*time.Time, error) {
-	prop := todo.GetProperty("X-2DOAPP-METADATA")
-	if prop == nil {
-		return nil, nil
+func (s *convertService) RemoveProperty(component ical.ComponentBase, property ical.ComponentProperty) ical.ComponentBase {
+	for i := 0; i < len(component.Properties); i++ {
+		if ical.ComponentProperty(component.Properties[i].IANAToken) == property {
+			component.Properties = append(component.Properties[:i], component.Properties[i+1:]...)
+			i--
+		}
 	}
 
-	raw := prop.Value
-	content := strings.TrimSuffix(strings.TrimPrefix(raw, "<2Do Meta>"), "</2Do Meta>\\n")
-	content, err := url.QueryUnescape(content)
-	if err != nil {
-		return nil, fmt.Errorf("failed to unescape percent-encoding: %w", err)
-	}
-
-	var parsed struct {
-		StartDate int64
-	}
-	if err := json.Unmarshal([]byte(content), &parsed); err != nil {
-		return nil, fmt.Errorf("failed to unmarshall json: %w", err)
-	}
-	if parsed.StartDate == 0 {
-		return nil, nil
-	}
-
-	t := time.Unix(parsed.StartDate, 0)
-	return &t, nil
+	return component
 }

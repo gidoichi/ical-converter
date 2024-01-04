@@ -1,14 +1,53 @@
-package converter
+package usecase
 
 import (
-	ical "github.com/arran4/golang-ical"
+	"fmt"
+	"reflect"
 
-	"github.com/gidoichi/ical-converter/domain/component"
+	ical "github.com/arran4/golang-ical"
+	"github.com/gidoichi/ical-converter/entity/component"
 )
 
-func Convert(todo component.Todo) *component.Event {
+type Converter interface {
+	Convert(source DataSource) (converted *ical.Calendar, err error)
+}
+
+type converter struct {
+	repository Repository
+}
+
+func NewConverter(repository Repository) converter {
+	return converter{
+		repository: repository,
+	}
+}
+
+func (c *converter) Convert(source DataSource) (converted *ical.Calendar, err error) {
+	cal, err := c.repository.GetICal(source)
+	if err != nil {
+		return nil, err
+	}
+
+	converted = component.NewCalendarFrom(*cal)
+	for _, comp := range cal.Components {
+		var event *ical.VEvent
+
+		switch v := comp.(type) {
+		case *ical.VTodo:
+			event = c.convertFromTodo(*v)
+		default:
+			return nil, fmt.Errorf("component type not supported: %s", reflect.TypeOf(comp))
+		}
+
+		converted.AddVEvent(event)
+	}
+
+	return converted, nil
+}
+
+func (c *converter) convertFromTodo(todo ical.VTodo) *ical.VEvent {
 	id := todo.GetProperty(ical.ComponentPropertyUniqueId)
-	event := component.NewEvent(id.Value)
+	event := ical.NewEvent(id.Value)
 
 	for _, prop := range todo.UnknownPropertiesIANAProperties() {
 		var params []ical.PropertyParameter
