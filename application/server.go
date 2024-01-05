@@ -51,8 +51,14 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		var httpErr *httperror.T
 		if ok := errors.As(err, &httpErr); ok {
-			http.Error(w, "", httpErr.StatusCode)
-			return
+			if httperror.IsHTTPError(httpErr, http.StatusUnauthorized) {
+				w.Header().Set("WWW-Authenticate", "Basic")
+				http.Error(w, "", httpErr.StatusCode)
+				return
+			} else if httperror.IsHTTPError(httpErr, http.StatusForbidden) {
+				http.Error(w, "", httpErr.StatusCode)
+				return
+			}
 		}
 
 		log.Println("failed to convert: ", err)
