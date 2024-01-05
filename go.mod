@@ -3,6 +3,7 @@ module github.com/gidoichi/ical-converter
 go 1.21.5
 
 require (
+	cloudeng.io/net v0.0.0-20240104192724-ff629ed569a9
 	github.com/arran4/golang-ical v0.2.3
 	github.com/prometheus/client_golang v1.18.0
 	go.uber.org/mock v0.4.0
@@ -11,8 +12,6 @@ require (
 require (
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/cespare/xxhash/v2 v2.2.0 // indirect
-	github.com/golang/protobuf v1.5.3 // indirect
-	github.com/matttproud/golang_protobuf_extensions v1.0.4 // indirect
 	github.com/matttproud/golang_protobuf_extensions/v2 v2.0.0 // indirect
 	github.com/prometheus/client_model v0.5.0 // indirect
 	github.com/prometheus/common v0.45.0 // indirect

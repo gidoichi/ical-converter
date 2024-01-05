@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"github.com/gidoichi/ical-converter/application"
-	"github.com/gidoichi/ical-converter/application/datasource"
 	"github.com/gidoichi/ical-converter/infrastructure"
 	"github.com/gidoichi/ical-converter/usecase"
 )
@@ -25,8 +24,7 @@ func DI() *application.Server {
 	repository := infrastructure.NewTwoDoRepository(*tz)
 	converter := usecase.NewConverter(repository)
 	convertService := application.NewConvertService(&converter)
-	dataSource := datasource.NewHTTPICalDataSource(icsURL)
-	server := application.NewServer(convertService, dataSource, port)
+	server := application.NewServer(convertService, icsURL, port)
 
 	return &server
 }
