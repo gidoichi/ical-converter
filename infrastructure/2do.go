@@ -38,14 +38,20 @@ func (r *twoDoRepository) GetICal(source usecase.DataSource) (cal *ical.Calendar
 				Properties: rawTodo.UnknownPropertiesIANAProperties(),
 			},
 		}
-		if start, err := r.getStartDateFrom2doappMetadata(&todo); start != nil && err == nil {
-			start := start.UTC()
-			if start.Hour() == 0 && start.Minute() == 0 && start.Second() == 0 {
-				todo.SetDateProperty(ical.ComponentPropertyDtStart, valuetype.NewDate(start))
-			} else {
-				todo.SetDateTimeProperty(ical.ComponentPropertyDtStart, valuetype.NewDateTime(start))
+
+		if metadata, err := parseMetadata(todo); err == nil {
+			if start, err := metadata.getStartTime(); err == nil {
+				start := start.UTC()
+				if start.Hour() == 0 && start.Minute() == 0 && start.Second() == 0 {
+					todo.SetDateProperty(ical.ComponentPropertyDtStart, valuetype.NewDate(start))
+				} else {
+					todo.SetDateTimeProperty(ical.ComponentPropertyDtStart, valuetype.NewDateTime(start))
+				}
 			}
-		} else if err != nil {
+			if url := metadata.getURL(); url != nil {
+				todo.SetProperty(ical.ComponentPropertyUrl, *url)
+			}
+		} else {
 			log.Println(err)
 		}
 
@@ -76,7 +82,13 @@ func (r *twoDoRepository) GetICal(source usecase.DataSource) (cal *ical.Calendar
 	return cal, nil
 }
 
-func (c *twoDoRepository) getStartDateFrom2doappMetadata(todo *component.Todo) (*time.Time, error) {
+type metadata struct {
+	ActionType  int    `json:"actionType"`
+	ActionValue string `json:"actionValue"`
+	StartDate   int64  `json:"StartDate"`
+}
+
+func parseMetadata(todo component.Todo) (*metadata, error) {
 	prop := todo.GetProperty("X-2DOAPP-METADATA")
 	if prop == nil {
 		return nil, nil
@@ -89,16 +101,23 @@ func (c *twoDoRepository) getStartDateFrom2doappMetadata(todo *component.Todo) (
 		return nil, fmt.Errorf("failed to unescape percent-encoding: %w", err)
 	}
 
-	var parsed struct {
-		StartDate int64
-	}
+	var parsed metadata
 	if err := json.Unmarshal([]byte(content), &parsed); err != nil {
 		return nil, fmt.Errorf("failed to unmarshall json: %w", err)
 	}
-	if parsed.StartDate == 0 {
-		return nil, nil
+
+	return &parsed, nil
+}
+
+func (m metadata) getURL() (url *string) {
+	if m.ActionType != 9 {
+		return nil
 	}
 
-	t := time.Unix(parsed.StartDate, 0)
+	return &m.ActionValue
+}
+
+func (m metadata) getStartTime() (*time.Time, error) {
+	t := time.Unix(m.StartDate, 0)
 	return &t, nil
 }
