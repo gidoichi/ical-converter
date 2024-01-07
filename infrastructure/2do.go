@@ -82,10 +82,21 @@ func (r *twoDoRepository) GetICal(source usecase.DataSource) (cal *ical.Calendar
 	return cal, nil
 }
 
+type ActionType int
+
+var (
+	ActionTypeCall    ActionType = 5
+	ActionTypeMessage ActionType = 6
+	ActionTypeMail    ActionType = 7
+	ActionTypeVisit   ActionType = 8
+	ActionTypeURL     ActionType = 9
+	ActionTypeSearch  ActionType = 10
+)
+
 type metadata struct {
-	ActionType  int    `json:"actionType"`
-	ActionValue string `json:"actionValue"`
-	StartDate   int64  `json:"StartDate"`
+	ActionType  ActionType `json:"actionType"`
+	ActionValue string     `json:"actionValue"`
+	StartDate   int64      `json:"StartDate"`
 }
 
 func parseMetadata(todo component.Todo) (*metadata, error) {
@@ -110,7 +121,7 @@ func parseMetadata(todo component.Todo) (*metadata, error) {
 }
 
 func (m metadata) getURL() (url *string) {
-	if m.ActionType != 9 {
+	if m.ActionType != ActionTypeURL {
 		return nil
 	}
 
