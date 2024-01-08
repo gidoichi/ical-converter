@@ -1,11 +1,8 @@
-package infrastructure
+package two_do
 
 import (
-	"encoding/json"
 	"fmt"
 	"log"
-	"net/url"
-	"strings"
 	"time"
 
 	ical "github.com/arran4/golang-ical"
@@ -38,15 +35,21 @@ func (r *twoDoRepository) GetICal(source usecase.DataSource) (cal *ical.Calendar
 				Properties: rawTodo.UnknownPropertiesIANAProperties(),
 			},
 		}
-		if start, err := r.getStartDateFrom2doappMetadata(&todo); start != nil && err == nil {
-			start := start.UTC()
-			if start.Hour() == 0 && start.Minute() == 0 && start.Second() == 0 {
-				todo.SetDateProperty(ical.ComponentPropertyDtStart, valuetype.NewDate(start))
-			} else {
-				todo.SetDateTimeProperty(ical.ComponentPropertyDtStart, valuetype.NewDateTime(start))
+
+		if metadata, err := parseMetadata(todo); err == nil && metadata != nil {
+			if start, err := metadata.getStartTime(); err == nil && start != nil {
+				start := start.UTC()
+				if start.Hour() == 0 && start.Minute() == 0 && start.Second() == 0 {
+					todo.SetDateProperty(ical.ComponentPropertyDtStart, valuetype.NewDate(start))
+				} else {
+					todo.SetDateTimeProperty(ical.ComponentPropertyDtStart, valuetype.NewDateTime(start))
+				}
+			}
+			if url := metadata.getURL(); url != nil {
+				todo.SetProperty(ical.ComponentPropertyUrl, *url)
 			}
 		} else if err != nil {
-			log.Println(err)
+			log.Println(fmt.Errorf("failed to parse metadata: %w", err))
 		}
 
 		for _, targetProp := range []ical.Property{
@@ -74,31 +77,4 @@ func (r *twoDoRepository) GetICal(source usecase.DataSource) (cal *ical.Calendar
 	}
 
 	return cal, nil
-}
-
-func (c *twoDoRepository) getStartDateFrom2doappMetadata(todo *component.Todo) (*time.Time, error) {
-	prop := todo.GetProperty("X-2DOAPP-METADATA")
-	if prop == nil {
-		return nil, nil
-	}
-
-	raw := prop.Value
-	content := strings.TrimSuffix(strings.TrimPrefix(raw, "<2Do Meta>"), "</2Do Meta>\\n")
-	content, err := url.QueryUnescape(content)
-	if err != nil {
-		return nil, fmt.Errorf("failed to unescape percent-encoding: %w", err)
-	}
-
-	var parsed struct {
-		StartDate int64
-	}
-	if err := json.Unmarshal([]byte(content), &parsed); err != nil {
-		return nil, fmt.Errorf("failed to unmarshall json: %w", err)
-	}
-	if parsed.StartDate == 0 {
-		return nil, nil
-	}
-
-	t := time.Unix(parsed.StartDate, 0)
-	return &t, nil
 }

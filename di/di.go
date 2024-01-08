@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/gidoichi/ical-converter/application"
-	"github.com/gidoichi/ical-converter/infrastructure"
+	twoDo "github.com/gidoichi/ical-converter/infrastructure/two_do"
 	"github.com/gidoichi/ical-converter/usecase"
 )
 
@@ -21,7 +21,7 @@ func DI() *application.Server {
 	}
 
 	tz := time.FixedZone("JST", int((+9 * time.Hour).Seconds()))
-	repository := infrastructure.NewTwoDoRepository(*tz)
+	repository := twoDo.NewTwoDoRepository(*tz)
 	converter := usecase.NewConverter(repository)
 	convertService := application.NewConvertService(&converter)
 	server := application.NewServer(convertService, icsURL, port)
