@@ -22,9 +22,9 @@ var (
 )
 
 type metadata struct {
-	ActionType  ActionType `json:"actionType"`
-	ActionValue string     `json:"actionValue"`
-	StartDate   int64      `json:"StartDate"`
+	ActionType  *ActionType `json:"actionType"`
+	ActionValue *string     `json:"actionValue"`
+	StartDate   *int64      `json:"StartDate"`
 }
 
 func parseMetadata(todo component.Todo) (*metadata, error) {
@@ -49,14 +49,17 @@ func parseMetadata(todo component.Todo) (*metadata, error) {
 }
 
 func (m metadata) getURL() (url *string) {
-	if m.ActionType != ActionTypeURL {
+	if m.ActionType == nil || *m.ActionType != ActionTypeURL || m.ActionValue == nil {
 		return nil
 	}
 
-	return &m.ActionValue
+	return m.ActionValue
 }
 
 func (m metadata) getStartTime() (*time.Time, error) {
-	t := time.Unix(m.StartDate, 0)
+	if m.StartDate == nil {
+		return nil, nil
+	}
+	t := time.Unix(*m.StartDate, 0)
 	return &t, nil
 }

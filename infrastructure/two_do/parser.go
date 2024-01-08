@@ -1,6 +1,7 @@
 package two_do
 
 import (
+	"fmt"
 	"log"
 	"time"
 
@@ -35,8 +36,8 @@ func (r *twoDoRepository) GetICal(source usecase.DataSource) (cal *ical.Calendar
 			},
 		}
 
-		if metadata, err := parseMetadata(todo); err == nil {
-			if start, err := metadata.getStartTime(); err == nil {
+		if metadata, err := parseMetadata(todo); err == nil && metadata != nil {
+			if start, err := metadata.getStartTime(); err == nil && start != nil {
 				start := start.UTC()
 				if start.Hour() == 0 && start.Minute() == 0 && start.Second() == 0 {
 					todo.SetDateProperty(ical.ComponentPropertyDtStart, valuetype.NewDate(start))
@@ -47,8 +48,8 @@ func (r *twoDoRepository) GetICal(source usecase.DataSource) (cal *ical.Calendar
 			if url := metadata.getURL(); url != nil {
 				todo.SetProperty(ical.ComponentPropertyUrl, *url)
 			}
-		} else {
-			log.Println(err)
+		} else if err != nil {
+			log.Println(fmt.Errorf("failed to parse metadata: %w", err))
 		}
 
 		for _, targetProp := range []ical.Property{
