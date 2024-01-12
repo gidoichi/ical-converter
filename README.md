@@ -2,7 +2,7 @@
 
 # ical-converter
 
-ical-converter convertes iCalendar (RFC5545) components to event component.
+ical-converter convertes iCalendar (RFC5545) components to event component. It is running as a server to get iCalendar from URL and convert to VEVENT contained iCalendar to register external calendar service.
 
 Some component specified properties are also converted to corresponding properties.
 
@@ -37,3 +37,36 @@ END:VCALENDAR
 ```
 
 In this case, todo component is converted to event conponent. And because of due property (DUE) does not exist at vevent property, it converted to date-time end property (DTEND).
+
+## Usage
+
+```console
+$ export PORT='8080'
+$ export ICAL_CONVERTER_ICS_URL='https://example.com/remote/ical.ics'
+$ go run ./main.go &
+$ curl localhost:8080
+BEGIN:VCALENDAR
+...
+END:VCALENDAR
+```
+
+## Configuration
+### Environment variables
+| NAME                   | DESCRIPTION                   |
+|------------------------|-------------------------------|
+| PORT                   | Lisning requests on this port |
+| ICAL_CONVERTER_ICS_URL | Remote ical file server       |
+
+## Detailed conversion rule
+iCalendar is converted following three times.
+
+### Non-Standard Properties
+| SERVICE                        | PARSER                           |
+|--------------------------------|----------------------------------|
+| [2Do](https://www.2doapp.com/) | [two_do](/infrastructure/two_do) |
+
+### Scheduled components
+[converter](/usecase/converter.go)
+
+### Filtering components
+[service](/application/service.go)
