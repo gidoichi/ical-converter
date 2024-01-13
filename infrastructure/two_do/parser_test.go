@@ -17,7 +17,7 @@ func TestGetICal(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 	dataSource := mock_usecase.NewMockDataSource(ctrl)
-	repository := two_do.NewTwoDoRepository(*time.UTC)
+	repository := two_do.NewTwoDoRepository(*time.FixedZone("JST", int((+9 * time.Hour).Seconds())))
 	given := ical.Calendar{
 		Components: []ical.Component{
 			&ical.VTodo{ComponentBase: ical.ComponentBase{Properties: []ical.IANAProperty{
@@ -48,6 +48,17 @@ func TestGetICal(t *testing.T) {
 					Value:     "3",
 				}},
 			}}},
+			&ical.VTodo{ComponentBase: ical.ComponentBase{Properties: []ical.IANAProperty{
+				{BaseProperty: ical.BaseProperty{
+					IANAToken: "UID",
+					Value:     "4",
+				}},
+				{BaseProperty: ical.BaseProperty{
+					IANAToken:      "X-2DOAPP-METADATA",
+					ICalParameters: map[string][]string{"SHARE-SCOPE": {"GLOBAL"}},
+					Value:          "<2Do Meta>%7B%22RecurrenceValue%22%3A0%2C%22RecurrenceEndRepetitionsOrig%22%3A0%2C%22StartDate%22%3A1705161600%2C%22RecurrenceEndRepetitions%22%3A0%2C%22TaskType%22%3A0%2C%22TaskDuration%22%3A0%2C%22RecurrenceType%22%3A0%2C%22StartDayDelay%22%3A0%2C%22isExpandedToShowChildProjects%22%3A0%2C%22IsStarred%22%3A0%2C%22RecurrenceFrom%22%3A0%2C%22RecurrenceEndType%22%3A0%2C%22RUID%22%3A%22%22%2C%22DisplayOrder%22%3A0%7D</2Do Meta>\\n",
+				}},
+			}}},
 		},
 	}
 	dataSource.EXPECT().GetICal().Return(&given, nil)
@@ -62,7 +73,7 @@ func TestGetICal(t *testing.T) {
 	if err != nil {
 		t.Errorf("unexpected error: %s", err)
 	}
-	if len(cal.Components) != 3 {
+	if len(cal.Components) != 4 {
 		t.Errorf("unexpected calendar: %s", cal.Serialize())
 	}
 
@@ -110,5 +121,22 @@ func TestGetICal(t *testing.T) {
 	}
 	if cal.Components[2].UnknownPropertiesIANAProperties()[0].IANAToken != string(ical.ComponentPropertyUniqueId) {
 		t.Errorf("component does not have UID property: %v", cal.Components[2].UnknownPropertiesIANAProperties()[0])
+	}
+
+	log.Println("Component with not all-day task is parsed")
+	if len(cal.Components[3].UnknownPropertiesIANAProperties()) != 3 {
+		t.Errorf("component does not have 2 properties: %s", cal.Components[3])
+	}
+	if cal.Components[3].UnknownPropertiesIANAProperties()[0].IANAToken != string(ical.ComponentPropertyUniqueId) {
+		t.Errorf("component does not have UID property: %v", cal.Components[3].UnknownPropertiesIANAProperties()[0])
+	}
+	if cal.Components[3].UnknownPropertiesIANAProperties()[1].IANAToken != "X-2DOAPP-METADATA" {
+		t.Errorf("component does not have X-2DOAPP-METADATA property: %v", cal.Components[3].UnknownPropertiesIANAProperties()[1])
+	}
+	if cal.Components[3].UnknownPropertiesIANAProperties()[2].IANAToken != string(ical.PropertyDtstart) {
+		t.Errorf("component does not have DTSTART property: %v", cal.Components[3].UnknownPropertiesIANAProperties()[2])
+	}
+	if cal.Components[3].UnknownPropertiesIANAProperties()[2].Value != "20240113T070000Z" {
+		t.Errorf("unexpected DTSTART: %s", cal.Components[3].UnknownPropertiesIANAProperties()[2].Value)
 	}
 }
