@@ -17,7 +17,7 @@ func TestGetICal(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 	dataSource := mock_usecase.NewMockDataSource(ctrl)
-	repository := two_do.NewTwoDoRepository(*time.UTC)
+	repository := two_do.NewTwoDoRepository(*time.FixedZone("JST", int((+9 * time.Hour).Seconds())))
 	given := ical.Calendar{
 		Components: []ical.Component{
 			&ical.VTodo{ComponentBase: ical.ComponentBase{Properties: []ical.IANAProperty{

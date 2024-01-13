@@ -14,5 +14,5 @@ func NewDate(t time.Time) Date {
 }
 
 func (t Date) String() string {
-	return time.Time(t).UTC().Format("20060102")
+	return time.Time(t).Format("20060102")
 }

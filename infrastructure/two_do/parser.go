@@ -36,13 +36,12 @@ func (r *twoDoRepository) GetICal(source usecase.DataSource) (cal *ical.Calendar
 			},
 		}
 
-		if metadata, err := parseMetadata(todo); err == nil && metadata != nil {
+		if metadata, err := parseMetadata(todo, r.timeZone); err == nil && metadata != nil {
 			if start, err := metadata.getStartTime(); err == nil && start != nil {
-				start := start.UTC()
 				if start.Hour() == 0 && start.Minute() == 0 && start.Second() == 0 {
-					todo.SetDateProperty(ical.ComponentPropertyDtStart, valuetype.NewDate(start))
+					todo.SetDateProperty(ical.ComponentPropertyDtStart, valuetype.NewDate(*start))
 				} else {
-					todo.SetDateTimeProperty(ical.ComponentPropertyDtStart, valuetype.NewDateTime(start))
+					todo.SetDateTimeProperty(ical.ComponentPropertyDtStart, valuetype.NewDateTime(*start))
 				}
 			}
 			if url := metadata.getURL(); url != nil {

@@ -22,12 +22,13 @@ var (
 )
 
 type metadata struct {
+	timeZone    time.Location
 	ActionType  *ActionType `json:"actionType"`
 	ActionValue *string     `json:"actionValue"`
 	StartDate   *int64      `json:"StartDate"`
 }
 
-func parseMetadata(todo component.Todo) (*metadata, error) {
+func parseMetadata(todo component.Todo, tz time.Location) (*metadata, error) {
 	prop := todo.GetProperty("X-2DOAPP-METADATA")
 	if prop == nil {
 		return nil, nil
@@ -45,6 +46,7 @@ func parseMetadata(todo component.Todo) (*metadata, error) {
 		return nil, fmt.Errorf("failed to unmarshall json: %w", err)
 	}
 
+	parsed.timeZone = tz
 	return &parsed, nil
 }
 
@@ -60,6 +62,7 @@ func (m metadata) getStartTime() (*time.Time, error) {
 	if m.StartDate == nil {
 		return nil, nil
 	}
-	t := time.Unix(*m.StartDate, 0)
-	return &t, nil
+	unix := time.Unix(*m.StartDate, 0)
+	t, err := time.ParseInLocation(time.DateTime, unix.UTC().Format(time.DateTime), &m.timeZone)
+	return &t, err
 }
