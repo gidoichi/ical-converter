@@ -1,7 +1,7 @@
 name: Plan
 on: push
 jobs:
-  plan-terraform:
+  terraform-plan:
     runs-on: ubuntu-latest
     steps:
       - uses: hashicorp/setup-terraform@v3
