@@ -4,14 +4,15 @@ jobs:
   setup:
     runs-on: ubuntu-latest
     steps:
-      - uses: hashicorp/setup-terraform@v3
       - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+        working-directory: github
   terraform-plan:
     needs: setup
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./github
+        working-directory: github
     steps:
       - run: terraform init
       - run: terraform plan -detailed-exitcode
