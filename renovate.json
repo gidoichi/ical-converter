@@ -3,7 +3,9 @@
   "extends": [
     "config:recommended"
   ],
-  "schedule": "* * * * 6",
+  "automerge": true,
   "branchConcurrentLimit": 0,
-  "labels": ["dependencies"]
+  "labels": ["dependencies"],
+  "platformAutomerge": true,
+  "schedule": "* * * * 6"
 }
