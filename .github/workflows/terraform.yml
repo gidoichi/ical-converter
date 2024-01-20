@@ -1,0 +1,16 @@
+name: Plan
+on: push
+jobs:
+  terraform-plan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_wrapper: false
+      - run: terraform init
+        working-directory: github
+      - run: terraform plan -detailed-exitcode
+        working-directory: github
+        env:
+          TF_VAR_GITHUB_TOKEN: ${{ secrets.TERRAFORM_PLANNER_GITHUB_TOKEN }}
