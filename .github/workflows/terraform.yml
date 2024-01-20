@@ -1,14 +1,11 @@
 name: Plan
 on: push
 jobs:
-  setup:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: hashicorp/setup-terraform@v3
-  terraform-plan:
+  plan-terraform:
     needs: setup
     runs-on: ubuntu-latest
     steps:
+      - uses: hashicorp/setup-terraform@v3
       - uses: actions/checkout@v4
       - run: terraform init
         working-directory: github
