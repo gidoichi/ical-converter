@@ -33,8 +33,9 @@ resource "github_branch_protection" "default" {
   required_status_checks {
     strict = true
     contexts = [
-      "go-test",
       "build-container",
+      "go-test",
+      "terraform-plan",
     ]
   }
 }

@@ -1,0 +1,15 @@
+name: Plan
+on: push
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: hashicorp/setup-terraform@v3
+  terraform-plan:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - run: terraform init
+      - run: terraform plan -detailed-exitcode
+        env:
+          TF_VAR_GITHUB_TOKEN: ${{ secrets.TERRAFORM_PLANNER_GITHUB_TOKEN }}
