@@ -24,7 +24,10 @@ func DI() *application.Server {
 	repository := twoDo.NewTwoDoRepository(*tz)
 	converter := usecase.NewConverter(repository)
 	convertService := application.NewConvertService(&converter)
-	server := application.NewServer(convertService, icsURL, port)
+	server, err := application.NewServer(convertService, icsURL, port)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	return &server
 }
