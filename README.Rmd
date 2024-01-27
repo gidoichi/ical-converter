@@ -25,8 +25,7 @@ is converted to
 ```{sh, echo=FALSE, comment=NA}
 export PORT=8080
 export ICAL_CONVERTER_ICS_URL="file:///$PWD/docs/sample.ics"
-go run ./main.go &
-curl --silent "localhost:$PORT"
+(go run ./main.go >/dev/null 2>&1 &) | wget --quiet --output-document=- "localhost:$PORT" | tr -d '\r'
 ```
 
 In this case, todo component is converted to event conponent. And because of due property (DUE) does not exist at vevent property, it converted to date-time end property (DTEND).

@@ -35,6 +35,7 @@ resource "github_branch_protection" "default" {
     contexts = [
       "build-container",
       "go-test",
+      "no-diff",
       "terraform-plan",
     ]
   }
