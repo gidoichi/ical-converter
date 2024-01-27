@@ -13,6 +13,7 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
+	"go.lsp.dev/uri"
 )
 
 type Server struct {
@@ -22,10 +23,13 @@ type Server struct {
 	scheme         string
 }
 
-func NewServer(convertService convertService, icsURL, port string) Server {
+func NewServer(convertService convertService, icsURL, port string) (Server, error) {
 	location, err := url.Parse(icsURL)
 	if err != nil {
-		log.Fatal("failed to parse ics url: ", err)
+		return Server{}, fmt.Errorf("failed to parse url: %w", err)
+	}
+	if !uriSchemeSupported(location.Scheme) {
+		return Server{}, fmt.Errorf("unsupported scheme: %s", location.Scheme)
 	}
 
 	return Server{
@@ -33,6 +37,15 @@ func NewServer(convertService convertService, icsURL, port string) Server {
 		icsURL:         icsURL,
 		scheme:         location.Scheme,
 		port:           port,
+	}, nil
+}
+
+func uriSchemeSupported(scheme string) bool {
+	switch scheme {
+	case uri.HTTPScheme, uri.HTTPSScheme, uri.FileScheme:
+		return true
+	default:
+		return false
 	}
 }
 
@@ -53,10 +66,10 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	var dataSource usecase.DataSource
 	switch s.scheme {
-	case "http", "https":
+	case uri.HTTPScheme, uri.HTTPSScheme:
 		username, password, _ := r.BasicAuth()
 		dataSource = datasource.NewHTTPICalDataSource(s.icsURL, username, password)
-	case "file":
+	case uri.FileScheme:
 		parsed, err := url.Parse(s.icsURL)
 		if err != nil {
 			log.Println("failed to parse url: ", err)
