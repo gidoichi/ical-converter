@@ -2,6 +2,8 @@ cloudeng.io/net v0.0.0-20240104192724-ff629ed569a9 h1:y72jrSO4jEI1drvPBAc8Zv1303
 cloudeng.io/net v0.0.0-20240104192724-ff629ed569a9/go.mod h1:rID9YZt8X7DnaNjuWrfY79q0Cb0qgFTOi3yxr8zdD10=
 cloudeng.io/net v0.0.0-20240119231719-f985f7cde7e8 h1:7baJGByQ0dkd4frhvYwZlbzrlhskvHfKg5dDThSNkKA=
 cloudeng.io/net v0.0.0-20240119231719-f985f7cde7e8/go.mod h1:rID9YZt8X7DnaNjuWrfY79q0Cb0qgFTOi3yxr8zdD10=
+cloudeng.io/net v0.0.0-20240120234157-7e30acc5437f h1:XxzDRRfquD4RSecbuhsqWClRKz6B+JaViCHI013BaeQ=
+cloudeng.io/net v0.0.0-20240120234157-7e30acc5437f/go.mod h1:rID9YZt8X7DnaNjuWrfY79q0Cb0qgFTOi3yxr8zdD10=
 github.com/arran4/golang-ical v0.2.3 h1:C4Vj7+BjJBIrAJhHgi6Ku+XUkQVugRq4re5Cqj5QVdE=
 github.com/arran4/golang-ical v0.2.3/go.mod h1:RqMuPGmwRRwjkb07hmm+JBqcWa1vF1LvVmPtSZN2OhQ=
 github.com/beorn7/perks v1.0.1 h1:VlbKKnNfV8bJzeqoa4cOKqO6bYr3WgKZxO8Z16+hsOM=
