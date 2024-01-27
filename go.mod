@@ -3,7 +3,7 @@ module github.com/gidoichi/ical-converter
 go 1.21.6
 
 require (
-	cloudeng.io/net v0.0.0-20240119231719-f985f7cde7e8
+	cloudeng.io/net v0.0.0-20240120234157-7e30acc5437f
 	github.com/arran4/golang-ical v0.2.3
 	github.com/prometheus/client_golang v1.18.0
 	go.uber.org/mock v0.4.0
