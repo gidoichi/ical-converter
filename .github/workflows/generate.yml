@@ -1,0 +1,64 @@
+name: Generate
+on:
+  push:
+    branches: ["**"]
+jobs:
+  checkout:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/upload-artifact@v4
+        with:
+          path: ${{ github.workspace }}
+          name: checkout
+
+  generate-docs:
+    needs: checkout
+    runs-on: ubuntu-latest
+    container:
+      image: gidoichi/r-rmd:v4.3.0-xpectr
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: checkout
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+      - name: Build
+        run: |
+          set -eux
+          go build -v
+      - name: Generate README.md
+        run: |
+          set -eux
+          R -q -e 'knitr::knit("README.Rmd")'
+      - uses: actions/upload-artifact@v4
+        with:
+          path: ${{ github.workspace }}
+          name: generate
+
+  no-diff:
+    needs: generate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: generate
+      - name: Show diff
+        run: |
+          set -eux
+          git diff --exit-code --color
+
+  pull-request:
+    needs: generate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: generate
+      - uses: peter-evans/create-pull-request@v5
+        with:
+          branch: create-pull-request/patch/gendocs
+          commit-message: "[skip ci] [create-pull-request] automated change"
+          delete-branch: true
+          token: ${{ secrets.GH_PAT_FOR_CREATE_PULL_REQUEST_ACTION }}
