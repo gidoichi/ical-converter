@@ -5,9 +5,11 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"net/url"
 
 	"cloudeng.io/net/http/httperror"
 	"github.com/gidoichi/ical-converter/application/datasource"
+	"github.com/gidoichi/ical-converter/usecase"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
@@ -17,12 +19,19 @@ type Server struct {
 	convertService convertService
 	icsURL         string
 	port           string
+	scheme         string
 }
 
 func NewServer(convertService convertService, icsURL, port string) Server {
+	location, err := url.Parse(icsURL)
+	if err != nil {
+		log.Fatal("failed to parse ics url: ", err)
+	}
+
 	return Server{
 		convertService: convertService,
 		icsURL:         icsURL,
+		scheme:         location.Scheme,
 		port:           port,
 	}
 }
@@ -42,9 +51,19 @@ func (s *Server) Run() {
 func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	log.Printf("%+v", r)
 
-	dataSource := datasource.NewHTTPICalDataSource(s.icsURL)
-	if username, password, ok := r.BasicAuth(); ok {
-		dataSource.SetBasicAuth(username, password)
+	var dataSource usecase.DataSource
+	switch s.scheme {
+	case "http", "https":
+		username, password, _ := r.BasicAuth()
+		dataSource = datasource.NewHTTPICalDataSource(s.icsURL, username, password)
+	case "file":
+		parsed, err := url.Parse(s.icsURL)
+		if err != nil {
+			log.Println("failed to parse url: ", err)
+			http.Error(w, "", http.StatusInternalServerError)
+			return
+		}
+		dataSource = datasource.NewFileICalDataSource(parsed.Path)
 	}
 
 	serialized, err := s.convertService.Convert(dataSource)
