@@ -6,6 +6,7 @@ import (
 
 	"cloudeng.io/net/http/httperror"
 	ical "github.com/arran4/golang-ical"
+	"github.com/gidoichi/ical-converter/usecase"
 )
 
 type httpICalDataSource struct {
@@ -14,15 +15,12 @@ type httpICalDataSource struct {
 	basicAuthPassword string
 }
 
-func NewHTTPICalDataSource(url string) httpICalDataSource {
+func NewHTTPICalDataSource(url, basicAuthUsername, basicAuthPassword string) usecase.DataSource {
 	return httpICalDataSource{
-		url: url,
+		url:               url,
+		basicAuthUsername: basicAuthUsername,
+		basicAuthPassword: basicAuthPassword,
 	}
-}
-
-func (d *httpICalDataSource) SetBasicAuth(username, password string) {
-	d.basicAuthUsername = username
-	d.basicAuthPassword = password
 }
 
 func (d httpICalDataSource) GetICal() (*ical.Calendar, error) {

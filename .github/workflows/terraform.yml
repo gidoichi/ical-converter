@@ -13,4 +13,4 @@ jobs:
       - run: terraform plan -detailed-exitcode
         working-directory: github
         env:
-          TF_VAR_GITHUB_TOKEN: ${{ secrets.TERRAFORM_PLANNER_GITHUB_TOKEN }}
+          TF_VAR_GITHUB_TOKEN: ${{ secrets.GH_PAT_FOR_TERRAFORM_PLAN }}
