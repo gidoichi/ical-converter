@@ -41,13 +41,23 @@ jobs:
       - run: git diff --exit-code --color
 
   pull-request:
-    needs: generate-docs
+    needs: no-diff
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v4
         with:
           name: generate
+      - name: Check branch exists
+        id: check
+        run: |
+          set -eux
+          if git branch origin "${{ github.ref }}" >/dev/null; then
+            echo "exist=true" >> $GITHUB_OUTPUT
+          else
+            echo "exist=false" >> $GITHUB_OUTPUT
+          fi
       - uses: peter-evans/create-pull-request@v6
+        if: ${{ jobs.check.outputs.status == 'true' }}
         with:
           branch: create-pull-request/patch/gendocs
           commit-message: "[skip ci] [create-pull-request] automated change"
