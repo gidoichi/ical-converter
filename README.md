@@ -1,6 +1,5 @@
 [![Publish](https://github.com/gidoichi/ical-converter/actions/workflows/publish.yml/badge.svg)](https://hub.docker.com/repository/docker/gidoichi/ical-converter/general)
 
-<!-- add this line for test ->
 # ical-converter
 
 ical-converter convertes iCalendar (RFC5545) components to event component. It is running as a server to get iCalendar from URL and convert to VEVENT contained iCalendar to register external calendar service.
