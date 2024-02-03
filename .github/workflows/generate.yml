@@ -41,7 +41,8 @@ jobs:
       - run: git diff --exit-code --color
 
   pull-request:
-    needs: generate-docs
+    needs: no-diff
+    if: ${{ failure() }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v4
