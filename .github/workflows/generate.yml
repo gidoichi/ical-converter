@@ -51,10 +51,10 @@ jobs:
         id: check
         run: |
           set -eux
-          if git branch origin "${{ github.ref }}"; then
-            echo "exist=true" >> $GITHUB_OUTPUT
+          if git fetch origin '${{ github.ref }}'; then
+            echo exist=true >> $GITHUB_OUTPUT
           else
-            echo "exist=false" >> $GITHUB_OUTPUT
+            echo exist=false >> $GITHUB_OUTPUT
           fi
       - uses: peter-evans/create-pull-request@v6
         if: ${{ steps.check.outputs.exist == 'true' }}
