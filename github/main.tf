@@ -36,6 +36,7 @@ resource "github_branch_protection" "default" {
       "build-container",
       "go-test",
       "no-diff",
+      "Generate.jobs.job.pull-request",
       "terraform-plan",
     ]
   }
