@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="doc2go">
+    <link href="../../../../_/css/main.css" rel="stylesheet" />
+    <link rel="apple-touch-icon" sizes="180x180" href="../../../../_/icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../../../../_/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../../../../_/icons/favicon-16x16.png">
+    <link rel="shortcut icon" href="../../../../_/icons/favicon.ico"><title>usecase</title>
+</head>
+  <body>
+    <nav>
+        <a href="../../..">github.com</a>/<a href="../..">gidoichi</a>/<a href="..">ical-converter</a>/usecase<span class="navbar-right">
+          <a href="../../../..">Root</a> | <a href="#pkg-index">Index</a></span>
+      </nav>
+    <main><h2 id="pkg-overview">package usecase</h2>
+<pre class="chroma"><span class="kn">import</span> <span class="s">&#34;github.com/gidoichi/ical-converter/usecase&#34;</span></pre>
+<h3 id="pkg-index">Index</h3>
+<ul>
+  <li><a href="#NewConverter">func NewConverter(repository Repository) converter</a></li>
+  <li>
+      <a href="#Converter">type Converter</a>
+      </li>
+  <li>
+      <a href="#DataSource">type DataSource</a>
+      </li>
+  <li>
+      <a href="#Repository">type Repository</a>
+      </li>
+  </ul><h3 id="pkg-functions">Functions</h3>
+  <h3 id="NewConverter">func NewConverter</h3>
+    <pre class="chroma"><span class="kd">func</span> <span class="nf">NewConverter</span><span class="p">(</span><span class="nx">repository</span> <a href="#Repository"><span class="nx">Repository</span></a><span class="p">)</span> <span class="nx">converter</span></pre>
+    <h3 id="pkg-types">Types</h3>
+  <h3 id="Converter">type Converter</h3>
+    <pre class="chroma"><span class="kd">type</span> <span class="nx">Converter</span> <span class="kd">interface</span> <span class="p">{</span>
+	<span id="Converter.Convert"><span class="nf">Convert</span></span><span class="p">(</span><span class="nx">source</span> <a href="#DataSource"><span class="nx">DataSource</span></a><span class="p">)</span> <span class="p">(</span><span class="nx">converted</span> <span class="o">*</span><a href="https://pkg.go.dev/github.com/arran4/golang-ical"><span class="nx">ical</span></a><span class="p">.</span><a href="https://pkg.go.dev/github.com/arran4/golang-ical#Calendar"><span class="nx">Calendar</span></a><span class="p">,</span> <span class="nx">err</span> <a href="https://pkg.go.dev/builtin#error"><span class="kt">error</span></a><span class="p">)</span>
+<span class="p">}</span></pre>
+    <h3 id="DataSource">type DataSource</h3>
+    <pre class="chroma"><span class="kd">type</span> <span class="nx">DataSource</span> <span class="kd">interface</span> <span class="p">{</span>
+	<span id="DataSource.GetICal"><span class="nf">GetICal</span></span><span class="p">()</span> <span class="p">(</span><span class="o">*</span><a href="https://pkg.go.dev/github.com/arran4/golang-ical"><span class="nx">ical</span></a><span class="p">.</span><a href="https://pkg.go.dev/github.com/arran4/golang-ical#Calendar"><span class="nx">Calendar</span></a><span class="p">,</span> <a href="https://pkg.go.dev/builtin#error"><span class="kt">error</span></a><span class="p">)</span>
+<span class="p">}</span></pre>
+    <h3 id="Repository">type Repository</h3>
+    <pre class="chroma"><span class="kd">type</span> <span class="nx">Repository</span> <span class="kd">interface</span> <span class="p">{</span>
+	<span id="Repository.GetICal"><span class="nf">GetICal</span></span><span class="p">(</span><span class="nx">source</span> <a href="#DataSource"><span class="nx">DataSource</span></a><span class="p">)</span> <span class="p">(</span><span class="o">*</span><a href="https://pkg.go.dev/github.com/arran4/golang-ical"><span class="nx">ical</span></a><span class="p">.</span><a href="https://pkg.go.dev/github.com/arran4/golang-ical#Calendar"><span class="nx">Calendar</span></a><span class="p">,</span> <a href="https://pkg.go.dev/builtin#error"><span class="kt">error</span></a><span class="p">)</span>
+<span class="p">}</span></pre>
+    <h3 id="pkg-directories">Directories</h3>
+
+<table>
+  <tbody>
+    <tr>
+        <td><a href="mock_usecase">mock_usecase</a></td>
+        <td>Package mock_usecase is a generated GoMock package.</td>
+      </tr>
+    </tbody>
+</table>
+</main>
+    <hr>
+    <footer>
+      <small id="generated-by-footer">
+        Generated with <a href="https://abhinav.github.io/doc2go/">doc2go</a>
+      </small>
+    </footer>
+    <script src="../../../../_/js/permalink.js"></script></body>
+</html>

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="doc2go">
+    <link href="../../../../../_/css/main.css" rel="stylesheet" />
+    <link rel="apple-touch-icon" sizes="180x180" href="../../../../../_/icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../../../../../_/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../../../../../_/icons/favicon-16x16.png">
+    <link rel="shortcut icon" href="../../../../../_/icons/favicon.ico"><title>mock_usecase</title>
+</head>
+  <body>
+    <nav>
+        <a href="../../../..">github.com</a>/<a href="../../..">gidoichi</a>/<a href="../..">ical-converter</a>/<a href="..">usecase</a>/mock_usecase<span class="navbar-right">
+          <a href="../../../../..">Root</a> | <a href="#pkg-index">Index</a></span>
+      </nav>
+    <main><h2 id="pkg-overview">package mock_usecase</h2>
+<pre class="chroma"><span class="kn">import</span> <span class="s">&#34;github.com/gidoichi/ical-converter/usecase/mock_usecase&#34;</span></pre>
+<p>Package mock_usecase is a generated GoMock package.
+<p>Package mock_usecase is a generated GoMock package.
+<h3 id="pkg-index">Index</h3>
+<ul>
+  <li>
+      <a href="#MockConverter">type MockConverter</a>
+      <ul>
+          <li><a href="#NewMockConverter">func NewMockConverter(ctrl *gomock.Controller) *MockConverter</a></li>
+          <li><a href="#MockConverter.Convert">func (m *MockConverter) Convert(source usecase.DataSource) (*ics.Calendar, error)</a></li>
+          <li><a href="#MockConverter.EXPECT">func (m *MockConverter) EXPECT() *MockConverterMockRecorder</a></li>
+          </ul>
+      </li>
+  <li>
+      <a href="#MockConverterMockRecorder">type MockConverterMockRecorder</a>
+      <ul>
+          <li><a href="#MockConverterMockRecorder.Convert">func (mr *MockConverterMockRecorder) Convert(source any) *gomock.Call</a></li>
+          </ul>
+      </li>
+  <li>
+      <a href="#MockDataSource">type MockDataSource</a>
+      <ul>
+          <li><a href="#NewMockDataSource">func NewMockDataSource(ctrl *gomock.Controller) *MockDataSource</a></li>
+          <li><a href="#MockDataSource.EXPECT">func (m *MockDataSource) EXPECT() *MockDataSourceMockRecorder</a></li>
+          <li><a href="#MockDataSource.GetICal">func (m *MockDataSource) GetICal() (*ics.Calendar, error)</a></li>
+          </ul>
+      </li>
+  <li>
+      <a href="#MockDataSourceMockRecorder">type MockDataSourceMockRecorder</a>
+      <ul>
+          <li><a href="#MockDataSourceMockRecorder.GetICal">func (mr *MockDataSourceMockRecorder) GetICal() *gomock.Call</a></li>
+          </ul>
+      </li>
+  <li>
+      <a href="#MockRepository">type MockRepository</a>
+      <ul>
+          <li><a href="#NewMockRepository">func NewMockRepository(ctrl *gomock.Controller) *MockRepository</a></li>
+          <li><a href="#MockRepository.EXPECT">func (m *MockRepository) EXPECT() *MockRepositoryMockRecorder</a></li>
+          <li><a href="#MockRepository.GetICal">func (m *MockRepository) GetICal(source usecase.DataSource) (*ics.Calendar, error)</a></li>
+          </ul>
+      </li>
+  <li>
+      <a href="#MockRepositoryMockRecorder">type MockRepositoryMockRecorder</a>
+      <ul>
+          <li><a href="#MockRepositoryMockRecorder.GetICal">func (mr *MockRepositoryMockRecorder) GetICal(source any) *gomock.Call</a></li>
+          </ul>
+      </li>
+  </ul><h3 id="pkg-types">Types</h3>
+  <h3 id="MockConverter">type MockConverter</h3>
+    <pre class="chroma"><span class="kd">type</span> <span class="nx">MockConverter</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="c1">// contains filtered or unexported fields
+</span><span class="c1"></span><span class="p">}</span></pre>
+    <p>MockConverter is a mock of Converter interface.
+<h4 id="NewMockConverter">func NewMockConverter</h4>
+  <pre class="chroma"><span class="kd">func</span> <span class="nf">NewMockConverter</span><span class="p">(</span><span class="nx">ctrl</span> <span class="o">*</span><a href="https://pkg.go.dev/go.uber.org/mock/gomock"><span class="nx">gomock</span></a><span class="p">.</span><a href="https://pkg.go.dev/go.uber.org/mock/gomock#Controller"><span class="nx">Controller</span></a><span class="p">)</span> <span class="o">*</span><a href="#MockConverter"><span class="nx">MockConverter</span></a></pre>
+  <p>NewMockConverter creates a new mock instance.
+<h4 id="MockConverter.Convert">func (*MockConverter) Convert</h4>
+  <pre class="chroma"><span class="kd">func</span> <span class="p">(</span><span class="nx">m</span> <span class="o">*</span><a href="#MockConverter"><span class="nx">MockConverter</span></a><span class="p">)</span> <span class="nf">Convert</span><span class="p">(</span><span class="nx">source</span> <a href=".."><span class="nx">usecase</span></a><span class="p">.</span><a href="..#DataSource"><span class="nx">DataSource</span></a><span class="p">)</span> <span class="p">(</span><span class="o">*</span><a href="https://pkg.go.dev/github.com/arran4/golang-ical"><span class="nx">ics</span></a><span class="p">.</span><a href="https://pkg.go.dev/github.com/arran4/golang-ical#Calendar"><span class="nx">Calendar</span></a><span class="p">,</span> <a href="https://pkg.go.dev/builtin#error"><span class="kt">error</span></a><span class="p">)</span></pre>
+  <p>Convert mocks base method.
+<h4 id="MockConverter.EXPECT">func (*MockConverter) EXPECT</h4>
+  <pre class="chroma"><span class="kd">func</span> <span class="p">(</span><span class="nx">m</span> <span class="o">*</span><a href="#MockConverter"><span class="nx">MockConverter</span></a><span class="p">)</span> <span class="nf">EXPECT</span><span class="p">()</span> <span class="o">*</span><a href="#MockConverterMockRecorder"><span class="nx">MockConverterMockRecorder</span></a></pre>
+  <p>EXPECT returns an object that allows the caller to indicate expected use.
+<h3 id="MockConverterMockRecorder">type MockConverterMockRecorder</h3>
+    <pre class="chroma"><span class="kd">type</span> <span class="nx">MockConverterMockRecorder</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="c1">// contains filtered or unexported fields
+</span><span class="c1"></span><span class="p">}</span></pre>
+    <p>MockConverterMockRecorder is the mock recorder for MockConverter.
+<h4 id="MockConverterMockRecorder.Convert">func (*MockConverterMockRecorder) Convert</h4>
+  <pre class="chroma"><span class="kd">func</span> <span class="p">(</span><span class="nx">mr</span> <span class="o">*</span><a href="#MockConverterMockRecorder"><span class="nx">MockConverterMockRecorder</span></a><span class="p">)</span> <span class="nf">Convert</span><span class="p">(</span><span class="nx">source</span> <a href="https://pkg.go.dev/builtin#any"><span class="nx">any</span></a><span class="p">)</span> <span class="o">*</span><a href="https://pkg.go.dev/go.uber.org/mock/gomock"><span class="nx">gomock</span></a><span class="p">.</span><a href="https://pkg.go.dev/go.uber.org/mock/gomock#Call"><span class="nx">Call</span></a></pre>
+  <p>Convert indicates an expected call of Convert.
+<h3 id="MockDataSource">type MockDataSource</h3>
+    <pre class="chroma"><span class="kd">type</span> <span class="nx">MockDataSource</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="c1">// contains filtered or unexported fields
+</span><span class="c1"></span><span class="p">}</span></pre>
+    <p>MockDataSource is a mock of DataSource interface.
+<h4 id="NewMockDataSource">func NewMockDataSource</h4>
+  <pre class="chroma"><span class="kd">func</span> <span class="nf">NewMockDataSource</span><span class="p">(</span><span class="nx">ctrl</span> <span class="o">*</span><a href="https://pkg.go.dev/go.uber.org/mock/gomock"><span class="nx">gomock</span></a><span class="p">.</span><a href="https://pkg.go.dev/go.uber.org/mock/gomock#Controller"><span class="nx">Controller</span></a><span class="p">)</span> <span class="o">*</span><a href="#MockDataSource"><span class="nx">MockDataSource</span></a></pre>
+  <p>NewMockDataSource creates a new mock instance.
+<h4 id="MockDataSource.EXPECT">func (*MockDataSource) EXPECT</h4>
+  <pre class="chroma"><span class="kd">func</span> <span class="p">(</span><span class="nx">m</span> <span class="o">*</span><a href="#MockDataSource"><span class="nx">MockDataSource</span></a><span class="p">)</span> <span class="nf">EXPECT</span><span class="p">()</span> <span class="o">*</span><a href="#MockDataSourceMockRecorder"><span class="nx">MockDataSourceMockRecorder</span></a></pre>
+  <p>EXPECT returns an object that allows the caller to indicate expected use.
+<h4 id="MockDataSource.GetICal">func (*MockDataSource) GetICal</h4>
+  <pre class="chroma"><span class="kd">func</span> <span class="p">(</span><span class="nx">m</span> <span class="o">*</span><a href="#MockDataSource"><span class="nx">MockDataSource</span></a><span class="p">)</span> <span class="nf">GetICal</span><span class="p">()</span> <span class="p">(</span><span class="o">*</span><a href="https://pkg.go.dev/github.com/arran4/golang-ical"><span class="nx">ics</span></a><span class="p">.</span><a href="https://pkg.go.dev/github.com/arran4/golang-ical#Calendar"><span class="nx">Calendar</span></a><span class="p">,</span> <a href="https://pkg.go.dev/builtin#error"><span class="kt">error</span></a><span class="p">)</span></pre>
+  <p>GetICal mocks base method.
+<h3 id="MockDataSourceMockRecorder">type MockDataSourceMockRecorder</h3>
+    <pre class="chroma"><span class="kd">type</span> <span class="nx">MockDataSourceMockRecorder</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="c1">// contains filtered or unexported fields
+</span><span class="c1"></span><span class="p">}</span></pre>
+    <p>MockDataSourceMockRecorder is the mock recorder for MockDataSource.
+<h4 id="MockDataSourceMockRecorder.GetICal">func (*MockDataSourceMockRecorder) GetICal</h4>
+  <pre class="chroma"><span class="kd">func</span> <span class="p">(</span><span class="nx">mr</span> <span class="o">*</span><a href="#MockDataSourceMockRecorder"><span class="nx">MockDataSourceMockRecorder</span></a><span class="p">)</span> <span class="nf">GetICal</span><span class="p">()</span> <span class="o">*</span><a href="https://pkg.go.dev/go.uber.org/mock/gomock"><span class="nx">gomock</span></a><span class="p">.</span><a href="https://pkg.go.dev/go.uber.org/mock/gomock#Call"><span class="nx">Call</span></a></pre>
+  <p>GetICal indicates an expected call of GetICal.
+<h3 id="MockRepository">type MockRepository</h3>
+    <pre class="chroma"><span class="kd">type</span> <span class="nx">MockRepository</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="c1">// contains filtered or unexported fields
+</span><span class="c1"></span><span class="p">}</span></pre>
+    <p>MockRepository is a mock of Repository interface.
+<h4 id="NewMockRepository">func NewMockRepository</h4>
+  <pre class="chroma"><span class="kd">func</span> <span class="nf">NewMockRepository</span><span class="p">(</span><span class="nx">ctrl</span> <span class="o">*</span><a href="https://pkg.go.dev/go.uber.org/mock/gomock"><span class="nx">gomock</span></a><span class="p">.</span><a href="https://pkg.go.dev/go.uber.org/mock/gomock#Controller"><span class="nx">Controller</span></a><span class="p">)</span> <span class="o">*</span><a href="#MockRepository"><span class="nx">MockRepository</span></a></pre>
+  <p>NewMockRepository creates a new mock instance.
+<h4 id="MockRepository.EXPECT">func (*MockRepository) EXPECT</h4>
+  <pre class="chroma"><span class="kd">func</span> <span class="p">(</span><span class="nx">m</span> <span class="o">*</span><a href="#MockRepository"><span class="nx">MockRepository</span></a><span class="p">)</span> <span class="nf">EXPECT</span><span class="p">()</span> <span class="o">*</span><a href="#MockRepositoryMockRecorder"><span class="nx">MockRepositoryMockRecorder</span></a></pre>
+  <p>EXPECT returns an object that allows the caller to indicate expected use.
+<h4 id="MockRepository.GetICal">func (*MockRepository) GetICal</h4>
+  <pre class="chroma"><span class="kd">func</span> <span class="p">(</span><span class="nx">m</span> <span class="o">*</span><a href="#MockRepository"><span class="nx">MockRepository</span></a><span class="p">)</span> <span class="nf">GetICal</span><span class="p">(</span><span class="nx">source</span> <a href=".."><span class="nx">usecase</span></a><span class="p">.</span><a href="..#DataSource"><span class="nx">DataSource</span></a><span class="p">)</span> <span class="p">(</span><span class="o">*</span><a href="https://pkg.go.dev/github.com/arran4/golang-ical"><span class="nx">ics</span></a><span class="p">.</span><a href="https://pkg.go.dev/github.com/arran4/golang-ical#Calendar"><span class="nx">Calendar</span></a><span class="p">,</span> <a href="https://pkg.go.dev/builtin#error"><span class="kt">error</span></a><span class="p">)</span></pre>
+  <p>GetICal mocks base method.
+<h3 id="MockRepositoryMockRecorder">type MockRepositoryMockRecorder</h3>
+    <pre class="chroma"><span class="kd">type</span> <span class="nx">MockRepositoryMockRecorder</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="c1">// contains filtered or unexported fields
+</span><span class="c1"></span><span class="p">}</span></pre>
+    <p>MockRepositoryMockRecorder is the mock recorder for MockRepository.
+<h4 id="MockRepositoryMockRecorder.GetICal">func (*MockRepositoryMockRecorder) GetICal</h4>
+  <pre class="chroma"><span class="kd">func</span> <span class="p">(</span><span class="nx">mr</span> <span class="o">*</span><a href="#MockRepositoryMockRecorder"><span class="nx">MockRepositoryMockRecorder</span></a><span class="p">)</span> <span class="nf">GetICal</span><span class="p">(</span><span class="nx">source</span> <a href="https://pkg.go.dev/builtin#any"><span class="nx">any</span></a><span class="p">)</span> <span class="o">*</span><a href="https://pkg.go.dev/go.uber.org/mock/gomock"><span class="nx">gomock</span></a><span class="p">.</span><a href="https://pkg.go.dev/go.uber.org/mock/gomock#Call"><span class="nx">Call</span></a></pre>
+  <p>GetICal indicates an expected call of GetICal.
+</main>
+    <hr>
+    <footer>
+      <small id="generated-by-footer">
+        Generated with <a href="https://abhinav.github.io/doc2go/">doc2go</a>
+      </small>
+    </footer>
+    <script src="../../../../../_/js/permalink.js"></script></body>
+</html>

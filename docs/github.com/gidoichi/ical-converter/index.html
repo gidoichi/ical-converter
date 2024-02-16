@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="doc2go">
+    <link href="../../../_/css/main.css" rel="stylesheet" />
+    <link rel="apple-touch-icon" sizes="180x180" href="../../../_/icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../../../_/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../../../_/icons/favicon-16x16.png">
+    <link rel="shortcut icon" href="../../../_/icons/favicon.ico"><title>ical-converter</title>
+</head>
+  <body>
+    <nav>
+        <a href="../..">github.com</a>/<a href="..">gidoichi</a>/ical-converter<span class="navbar-right">
+          <a href="../../..">Root</a> | <a href="#pkg-index">Index</a></span>
+      </nav>
+    <main><h2 id="pkg-overview">ical-converter</h2>
+<pre class="chroma"><span class="kn">import</span> <span class="s">&#34;github.com/gidoichi/ical-converter&#34;</span></pre>
+<details id="example-package" class="example">
+      <summary>Example</summary>
+      <pre class="chroma"><span class="kn">package</span> <span class="nx">main</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;fmt&#34;</span>
+	<span class="s">&#34;log&#34;</span>
+	<span class="s">&#34;strings&#34;</span>
+
+	<span class="nx">ical</span> <span class="s">&#34;github.com/arran4/golang-ical&#34;</span>
+	<span class="s">&#34;github.com/gidoichi/ical-converter/usecase&#34;</span>
+<span class="p">)</span>
+
+<span class="kd">type</span> <span class="nx">stringICalDataSource</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">data</span> <span class="kt">string</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="p">(</span><span class="nx">d</span> <span class="nx">stringICalDataSource</span><span class="p">)</span> <span class="nf">GetICal</span><span class="p">()</span> <span class="p">(</span><span class="o">*</span><span class="nx">ical</span><span class="p">.</span><span class="nx">Calendar</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="nx">ical</span><span class="p">.</span><span class="nf">ParseCalendar</span><span class="p">(</span><span class="nx">strings</span><span class="p">.</span><span class="nf">NewReader</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">data</span><span class="p">))</span>
+<span class="p">}</span>
+
+<span class="kd">type</span> <span class="nx">simpleRepository</span> <span class="kd">struct</span> <span class="p">{</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="p">(</span><span class="nx">r</span> <span class="o">*</span><span class="nx">simpleRepository</span><span class="p">)</span> <span class="nf">GetICal</span><span class="p">(</span><span class="nx">source</span> <span class="nx">usecase</span><span class="p">.</span><span class="nx">DataSource</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="nx">ical</span><span class="p">.</span><span class="nx">Calendar</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="nx">source</span><span class="p">.</span><span class="nf">GetICal</span><span class="p">()</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="nx">source</span> <span class="o">:=</span> <span class="nx">stringICalDataSource</span><span class="p">{</span>
+		<span class="nx">data</span><span class="p">:</span> <span class="s">`
+</span><span class="s">BEGIN:VCALENDAR
+</span><span class="s">PRODID:-//xyz Corp//NONSGML PDA Calendar Version 1.0//EN
+</span><span class="s">VERSION:2.0
+</span><span class="s">BEGIN:VTODO
+</span><span class="s">DTSTAMP:19960704T120000Z
+</span><span class="s">UID:uid1@example.com
+</span><span class="s">DTSTART:19960918T143000Z
+</span><span class="s">DUE:19960920T220000Z
+</span><span class="s">SUMMARY:Networld+Interop Conference
+</span><span class="s">END:VTODO
+</span><span class="s">END:VCALENDAR`</span><span class="p">,</span>
+	<span class="p">}</span>
+
+	<span class="nx">repo</span> <span class="o">:=</span> <span class="nx">simpleRepository</span><span class="p">{}</span>
+	<span class="nx">converter</span> <span class="o">:=</span> <span class="nx">usecase</span><span class="p">.</span><span class="nf">NewConverter</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">repo</span><span class="p">)</span>
+	<span class="nx">cal</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">converter</span><span class="p">.</span><span class="nf">Convert</span><span class="p">(</span><span class="nx">source</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">log</span><span class="p">.</span><span class="nf">Fatal</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+	<span class="p">}</span>
+
+	<span class="c1">// Serialized calendar has CRLF. To remove CR for this example, strings.Replace is used.
+</span><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">strings</span><span class="p">.</span><span class="nf">Replace</span><span class="p">(</span><span class="nx">cal</span><span class="p">.</span><span class="nf">Serialize</span><span class="p">(),</span> <span class="s">&#34;\r&#34;</span><span class="p">,</span> <span class="s">&#34;&#34;</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+<span class="p">}</span></pre>
+      <div>
+          <p>Output:</p>
+          <pre>BEGIN:VCALENDAR
+PRODID:-//xyz Corp//NONSGML PDA Calendar Version 1.0//EN
+VERSION:2.0
+BEGIN:VEVENT
+UID:uid1@example.com
+DTSTAMP:19960704T120000Z
+DTSTART:19960918T143000Z
+DTEND:19960920T220000Z
+SUMMARY:Networld&#43;Interop Conference
+END:VEVENT
+END:VCALENDAR
+</pre>
+        </div></details>
+  <h3 id="pkg-index">Index</h3>
+<h4 id="pkg-examples">Examples</h4>
+<ul>
+  <li><a href="#example-package">package</a></li>
+  </ul><h3 id="pkg-directories">Directories</h3>
+
+<table>
+  <tbody>
+    <tr>
+        <td><a href="application">application</a></td>
+        <td></td>
+      </tr>
+    <tr>
+        <td><a href="di">di</a></td>
+        <td></td>
+      </tr>
+    <tr>
+        <td><a href="entity/component">entity/component</a></td>
+        <td></td>
+      </tr>
+    <tr>
+        <td><a href="entity/valuetype">entity/valuetype</a></td>
+        <td></td>
+      </tr>
+    <tr>
+        <td><a href="infrastructure/two_do">infrastructure/two_do</a></td>
+        <td></td>
+      </tr>
+    <tr>
+        <td><a href="usecase">usecase</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+</table>
+</main>
+    <hr>
+    <footer>
+      <small id="generated-by-footer">
+        Generated with <a href="https://abhinav.github.io/doc2go/">doc2go</a>
+      </small>
+    </footer>
+    <script src="../../../_/js/permalink.js"></script></body>
+</html>
