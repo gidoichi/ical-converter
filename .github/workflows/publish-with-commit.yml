@@ -1,0 +1,28 @@
+name: Publish
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  website:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    permissions:
+      pages: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+      - run: go install go.abhg.dev/doc2go@latest
+      - run: doc2go ./...
+      - uses: actions/deploy-pages@v4
+        id: deployment
