@@ -22,4 +22,4 @@ jobs:
       - id: sha256
         env:
           digest: ${{ steps.docker.outputs.digest }}
-        run: echo "::set-output name=digest::${digest#sha256:}"
+        run: echo "digest=${digest#sha256:}" >> "$GITHUB_OUTPUT"
