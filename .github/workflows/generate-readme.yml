@@ -1,4 +1,4 @@
-name: Generate
+name: Generate README.md
 on:
   push:
     branches: ["**"]
@@ -12,7 +12,7 @@ jobs:
           path: ${{ github.workspace }}
           name: checkout
 
-  generate-docs:
+  generate:
     needs: checkout
     runs-on: ubuntu-latest
     container:
@@ -32,7 +32,7 @@ jobs:
           name: generate
 
   no-diff:
-    needs: generate-docs
+    needs: generate
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v4
@@ -41,7 +41,7 @@ jobs:
       - run: git diff --exit-code --color
 
   pull-request:
-    needs: generate-docs
+    needs: generate
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v4

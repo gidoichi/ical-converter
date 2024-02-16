@@ -1,4 +1,5 @@
-[![Publish](https://github.com/gidoichi/ical-converter/actions/workflows/publish.yml/badge.svg)](https://hub.docker.com/repository/docker/gidoichi/ical-converter/general)
+[![Publish container image](https://github.com/gidoichi/ical-converter/actions/workflows/publish-container-image.yml/badge.svg)](https://github.com/gidoichi/ical-converter/actions/workflows/publish-container-image.yml)
+[![Publish documents](https://github.com/gidoichi/ical-converter/actions/workflows/publish-docs.yml/badge.svg)](https://github.com/gidoichi/ical-converter/actions/workflows/publish-docs.yml)
 
 # ical-converter
 
