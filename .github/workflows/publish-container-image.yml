@@ -1,10 +1,10 @@
-name: Publish
+name: Publish container image
 on:
   push:
     tags:
       - 'v*'
 jobs:
-  container:
+  publish:
     runs-on: ubuntu-latest
     environment:
       name: dockerhub
