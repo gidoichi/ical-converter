@@ -1,4 +1,0 @@
-name: Publish
-on:
-  workflow_dispatch:
-jobs:
