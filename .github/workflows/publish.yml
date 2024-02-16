@@ -6,6 +6,8 @@ on:
 jobs:
   container:
     runs-on: ubuntu-latest
+    environment:
+      url: https://hub.docker.com/layers/gidoichi/ical-converter/${{ github.ref_name }}/images/sha256-${{ steps.deployment.outputs.digest }}
     steps:
       - uses: docker/login-action@v3
         with:
