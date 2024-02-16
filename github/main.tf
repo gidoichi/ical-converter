@@ -48,16 +48,6 @@ resource "github_branch_protection" "default" {
 resource "github_repository_environment" "github-pages" {
   environment = "github-pages"
   repository  = github_repository.this.name
-  deployment_branch_policy {
-    protected_branches     = false
-    custom_branch_policies = true
-  }
-}
-
-resource "github_repository_environment_deployment_policy" "github-pages" {
-  repository     = github_repository.this.name
-  environment    = github_repository_environment.github-pages.environment
-  branch_pattern = "main"
 }
 
 resource "github_repository_environment" "dockerhub" {
