@@ -12,7 +12,7 @@ jobs:
           path: ${{ github.workspace }}
           name: checkout
 
-  generate-readme:
+  generate-docs:
     needs: checkout
     runs-on: ubuntu-latest
     container:
