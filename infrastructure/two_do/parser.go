@@ -47,6 +47,12 @@ func (r *twoDoRepository) GetICal(source usecase.DataSource) (cal *ical.Calendar
 			if url := metadata.getURL(); url != nil {
 				todo.SetProperty(ical.ComponentPropertyUrl, *url)
 			}
+
+			// Only at the first creation, child component has time range.
+			if todo.GetProperty(ical.ComponentProperty(ical.PropertyRelatedTo)) != nil {
+				todo.RemoveProperty(ical.ComponentPropertyDtStart)
+				todo.RemoveProperty(ical.ComponentPropertyDue)
+			}
 		} else if err != nil {
 			log.Println(fmt.Errorf("failed to parse metadata: %w", err))
 		}
