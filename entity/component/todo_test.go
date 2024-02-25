@@ -1,7 +1,6 @@
 package component_test
 
 import (
-	"log"
 	"reflect"
 	"testing"
 	"time"
@@ -11,7 +10,7 @@ import (
 	"github.com/gidoichi/ical-converter/entity/valuetype"
 )
 
-func TestSetDateProperty(t *testing.T) {
+func TestTodoSetsDateProperty(t *testing.T) {
 	// Given
 	var todo component.Todo
 
@@ -20,7 +19,6 @@ func TestSetDateProperty(t *testing.T) {
 	todo.SetDateProperty(ical.ComponentPropertyDtstamp, date)
 
 	// Then
-	log.Println("Set property is type of DATE")
 	if !reflect.DeepEqual(todo.GetProperty(ical.ComponentPropertyDtstamp).ICalParameters["VALUE"], []string{"DATE"}) {
 		t.Errorf("e.GetProperty(ical.ComponentPropertyDtstamp).ICalParameters[VALUE] = %s; want [DATE]", todo.GetProperty(ical.ComponentPropertyDtstamp).ICalParameters["VALUE"])
 	}
@@ -29,7 +27,7 @@ func TestSetDateProperty(t *testing.T) {
 	}
 }
 
-func TestSetDateTimeProperty(t *testing.T) {
+func TestTodoSetsDateTimeProperty(t *testing.T) {
 	// Given
 	var todo component.Todo
 
@@ -38,11 +36,30 @@ func TestSetDateTimeProperty(t *testing.T) {
 	todo.SetDateTimeProperty(ical.ComponentPropertyDtstamp, datetime)
 
 	// Then
-	log.Println("Set property is type of DATE-TIME")
 	if len(todo.GetProperty(ical.ComponentPropertyDtstamp).ICalParameters) != 0 {
 		t.Errorf("e.GetProperty(ical.ComponentPropertyDtstamp).ICalParameters = %s; want empty", todo.GetProperty(ical.ComponentPropertyDtstamp).ICalParameters)
 	}
 	if todo.GetProperty(ical.ComponentPropertyDtstamp).Value != "20060102T150405Z" {
 		t.Errorf("e.GetProperty(ical.ComponentPropertyDtstamp).Value = %s; want 20060102T150405Z", todo.GetProperty(ical.ComponentPropertyDtstamp).Value)
+	}
+}
+
+func TestTodoRemovesProperty(t *testing.T) {
+	// Given
+	todo := component.Todo(
+		ical.VTodo{ComponentBase: ical.ComponentBase{Properties: []ical.IANAProperty{
+			{BaseProperty: ical.BaseProperty{
+				IANAToken: "DTSTART",
+				Value:     "20060102T150405Z",
+			}},
+		}}},
+	)
+
+	// When
+	todo.RemoveProperty(ical.ComponentPropertyDtStart)
+
+	// Then
+	if len(todo.Properties) != 0 {
+		t.Errorf("len(e.Properties) = %d; want 0", len(todo.Properties))
 	}
 }
