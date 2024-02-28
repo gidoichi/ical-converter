@@ -10,7 +10,7 @@ import (
 	"github.com/gidoichi/ical-converter/entity/valuetype"
 )
 
-func TestTodoSetsDateProperty(t *testing.T) {
+func TestTodoCanSetDateProperty(t *testing.T) {
 	// Given
 	var todo component.Todo
 
@@ -27,7 +27,7 @@ func TestTodoSetsDateProperty(t *testing.T) {
 	}
 }
 
-func TestTodoSetsDateTimeProperty(t *testing.T) {
+func TestTodoCanSetDateTimeProperty(t *testing.T) {
 	// Given
 	var todo component.Todo
 
@@ -44,7 +44,7 @@ func TestTodoSetsDateTimeProperty(t *testing.T) {
 	}
 }
 
-func TestTodoRemovesProperty(t *testing.T) {
+func TestTodoCanRemoveProperty(t *testing.T) {
 	// Given
 	todo := component.Todo(
 		ical.VTodo{ComponentBase: ical.ComponentBase{Properties: []ical.IANAProperty{

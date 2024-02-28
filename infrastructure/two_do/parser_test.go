@@ -10,7 +10,7 @@ import (
 	"go.uber.org/mock/gomock"
 )
 
-func TestGetICalParsesSuccessfullyWhenComponentDoesNotHave2DoMetadata(t *testing.T) {
+func TestTwoDoRepositoryCallingGetICalParsesSuccessfullyWhenComponentDoesNotHave2DoMetadata(t *testing.T) {
 	// Given
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
@@ -48,7 +48,7 @@ func TestGetICalParsesSuccessfullyWhenComponentDoesNotHave2DoMetadata(t *testing
 	}
 }
 
-func TestGetICalParsesSuccessfullyWhenComponentHas2DoMetadataContainingStartDateAndActionType(t *testing.T) {
+func TestTwoDoRepositoryCallingGetICalParsesSuccessfullyWhenComponentHas2DoMetadataContainingStartDateAndActionType(t *testing.T) {
 	// Given
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
@@ -110,7 +110,7 @@ func TestGetICalParsesSuccessfullyWhenComponentHas2DoMetadataContainingStartDate
 	}
 }
 
-func TestGetICalParsesSuccessfullyWhenComponentHas2DoMetadataNeitherContainingStartDateNorActionType(t *testing.T) {
+func TestTwoDoRepositoryCallingGetICalParsesSuccessfullyWhenComponentHas2DoMetadataNeitherContainingStartDateNorActionType(t *testing.T) {
 	// Given
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
@@ -156,7 +156,7 @@ func TestGetICalParsesSuccessfullyWhenComponentHas2DoMetadataNeitherContainingSt
 	}
 }
 
-func TestGetICalParsesSuccessfullyWhenComponentIsNotAllDayTask(t *testing.T) {
+func TestTwoDoRepositoryCallingGetICalParsesSuccessfullyWhenComponentIsNotAllDayTask(t *testing.T) {
 	// Given
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
@@ -208,7 +208,7 @@ func TestGetICalParsesSuccessfullyWhenComponentIsNotAllDayTask(t *testing.T) {
 	}
 }
 
-func TestGetICalRemovesTimeRangeWhenComponentHasParent(t *testing.T) {
+func TestTwoDoRepositoryCallingGetICalRemovesTimeRangeWhenComponentHasParent(t *testing.T) {
 	// Given
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
