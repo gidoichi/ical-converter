@@ -1,7 +1,6 @@
 package usecase_test
 
 import (
-	"log"
 	"reflect"
 	"testing"
 
@@ -11,7 +10,7 @@ import (
 	"go.uber.org/mock/gomock"
 )
 
-func TestConvert(t *testing.T) {
+func TestConverterCanConvertVtodoToVevent(t *testing.T) {
 	// Given
 
 	ctrl := gomock.NewController(t)
@@ -42,7 +41,6 @@ func TestConvert(t *testing.T) {
 
 	// Then
 
-	log.Println("VTODO is converted to VEVENT")
 	if err != nil {
 		t.Errorf("unexpected error: %s", err)
 	}
@@ -53,7 +51,6 @@ func TestConvert(t *testing.T) {
 		t.Errorf("unexpected component type: %s", reflect.TypeOf(cal.Components[0]))
 	}
 
-	log.Println("Properties are converted to corresponding properties")
 	if len(cal.Components[0].UnknownPropertiesIANAProperties()) != 4 {
 		t.Errorf("unexpected properties: %s", cal.Serialize())
 	}
@@ -81,7 +78,7 @@ func TestConvert(t *testing.T) {
 	}
 }
 
-func TestConvert_UnknownComponent(t *testing.T) {
+func TestConverterCallingConvertReturnsErrorWithUnknownComponents(t *testing.T) {
 	// Given
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
@@ -99,7 +96,6 @@ func TestConvert_UnknownComponent(t *testing.T) {
 	_, err := converter.Convert(dataSource)
 
 	// Then
-	log.Println("error occurred")
 	if err == nil {
 		t.Error("expected error, but not")
 	}
