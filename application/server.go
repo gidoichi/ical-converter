@@ -55,13 +55,13 @@ func uriSchemeSupported(scheme string) bool {
 
 func (s *Server) Run() {
 	mux := http.NewServeMux()
-	mux.Handle("/metrics", promhttp.Handler())
 	mux.Handle("/", promhttp.InstrumentHandlerCounter(
 		promauto.NewCounterVec(prometheus.CounterOpts{
 			Name: "http_requests_total",
 		}, []string{"code"}),
 		s,
 	))
+	mux.Handle("/metrics", promhttp.Handler())
 	server := &http.Server{
 		Addr:    ":" + s.port,
 		Handler: mux,
