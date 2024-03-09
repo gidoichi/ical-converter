@@ -1,11 +1,15 @@
 package application
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"log"
 	"net/http"
 	"net/url"
+	"os"
+	"os/signal"
+	"syscall"
 
 	"cloudeng.io/net/http/httperror"
 	"github.com/gidoichi/ical-converter/application/datasource"
@@ -29,7 +33,7 @@ func NewServer(convertService convertService, icsURL, port string) (Server, erro
 		return Server{}, fmt.Errorf("failed to parse url: %w", err)
 	}
 	if !uriSchemeSupported(location.Scheme) {
-		return Server{}, fmt.Errorf("unsupported scheme: %s", location.Scheme)
+		return Server{}, fmt.Errorf("unsupported scheme: %#v", location.Scheme)
 	}
 
 	return Server{
@@ -50,15 +54,28 @@ func uriSchemeSupported(scheme string) bool {
 }
 
 func (s *Server) Run() {
-	http.Handle("/", promhttp.InstrumentHandlerCounter(
+	mux := http.NewServeMux()
+	mux.Handle("/", promhttp.InstrumentHandlerCounter(
 		promauto.NewCounterVec(prometheus.CounterOpts{
 			Name: "http_requests_total",
 		}, []string{"code"}),
 		s,
 	))
+	mux.Handle("/metrics", promhttp.Handler())
+	server := &http.Server{
+		Addr:    ":" + s.port,
+		Handler: mux,
+	}
+	go func() {
+		log.Println(server.ListenAndServe())
+	}()
 
-	http.Handle("/metrics", promhttp.Handler())
-	log.Fatal(http.ListenAndServe(":"+s.port, nil))
+	sig := make(chan os.Signal, 1)
+	signal.Notify(sig, syscall.SIGINT, syscall.SIGTERM)
+	<-sig
+	if err := server.Shutdown(context.Background()); err != nil {
+		log.Fatalf("failed to shutdown server: %v", err)
+	}
 }
 
 func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
