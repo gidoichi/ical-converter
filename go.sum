@@ -22,6 +22,8 @@ cloudeng.io/net v0.0.0-20240301160019-e47d52cd5d84 h1:jwa0LjbnbcJouvhGS+BgKEn8C5
 cloudeng.io/net v0.0.0-20240301160019-e47d52cd5d84/go.mod h1:1MmRGFc96u3Ml+XNlnsq/Pjmu5XwDxXi9zvkKpkTPlk=
 cloudeng.io/net v0.0.0-20240315173010-822871381e62 h1:ZznULSxracFn9ji/iix+i68r1aeJI5Thk1mglsmLUNo=
 cloudeng.io/net v0.0.0-20240315173010-822871381e62/go.mod h1:1MmRGFc96u3Ml+XNlnsq/Pjmu5XwDxXi9zvkKpkTPlk=
+cloudeng.io/net v0.0.0-20240316212519-c83428bae4cf h1:QCQ93UK+y7FmAovPrkbgxX3jHKDFOCb/G7Us+fwE7tQ=
+cloudeng.io/net v0.0.0-20240316212519-c83428bae4cf/go.mod h1:1MmRGFc96u3Ml+XNlnsq/Pjmu5XwDxXi9zvkKpkTPlk=
 github.com/arran4/golang-ical v0.2.3 h1:C4Vj7+BjJBIrAJhHgi6Ku+XUkQVugRq4re5Cqj5QVdE=
 github.com/arran4/golang-ical v0.2.3/go.mod h1:RqMuPGmwRRwjkb07hmm+JBqcWa1vF1LvVmPtSZN2OhQ=
 github.com/arran4/golang-ical v0.2.4 h1:0/rTXn2qqEekLKec3SzRRy+z7pCLtniMb0KD/dPogUo=
