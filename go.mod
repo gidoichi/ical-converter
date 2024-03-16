@@ -1,6 +1,6 @@
 module github.com/gidoichi/ical-converter
 
-go 1.22.0
+go 1.22.1
 
 require (
 	cloudeng.io/net v0.0.0-20240315173010-822871381e62
