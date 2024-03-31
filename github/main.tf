@@ -22,6 +22,7 @@ resource "github_repository" "this" {
   allow_merge_commit          = false
   allow_rebase_merge          = false
   delete_branch_on_merge      = true
+  description                 = "Convert iCalendar to register a calendar"
   has_issues                  = true
   squash_merge_commit_message = "BLANK"
   squash_merge_commit_title   = "PR_TITLE"
