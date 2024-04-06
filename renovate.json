@@ -7,11 +7,11 @@
   "branchConcurrentLimit": 0,
   "labels": ["dependencies"],
   "platformAutomerge": true,
-  "schedule": "* * * * 6",
+  "schedule": "* 0 * * 6",
   "packageRules": [
     {
       "matchPackagePatterns": [".*"],
-      "groupName": "any"
+      "groupName": "dependencies"
     }
   ]
 }
