@@ -3,14 +3,16 @@
   "extends": [
     "config:recommended"
   ],
-  "automerge": true,
   "branchConcurrentLimit": 0,
   "labels": ["dependencies"],
   "schedule": "* * 1 * *",
   "packageRules": [
     {
+      "groupName": "dependencies",
       "matchPackagePatterns": [".*"],
-      "groupName": "dependencies"
+      "automerge": true,
+      "commitMessagePrefix": "[automerged]",
+      "commitMessageExtra": null
     }
   ]
 }
