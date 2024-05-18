@@ -5,7 +5,7 @@
   ],
   "branchConcurrentLimit": 0,
   "labels": ["dependencies"],
-  "schedule": "* * 1 * *",
+  "schedule": "* * 1-7 * 6",
   "packageRules": [
     {
       "groupName": "dependencies",
