@@ -6,7 +6,6 @@
   "automerge": true,
   "branchConcurrentLimit": 0,
   "labels": ["dependencies"],
-  "platformAutomerge": true,
   "schedule": "* * 1 * *",
   "packageRules": [
     {
