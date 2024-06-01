@@ -28,6 +28,8 @@ cloudeng.io/net v0.0.0-20240322021419-c8ee83af06a4 h1:forb7zQ7pjFviyjy7IE3wNX9Br
 cloudeng.io/net v0.0.0-20240322021419-c8ee83af06a4/go.mod h1:1MmRGFc96u3Ml+XNlnsq/Pjmu5XwDxXi9zvkKpkTPlk=
 cloudeng.io/net v0.0.0-20240326195459-e2c53ed6771a h1:HlrIuxmaypVgR8rrtxpQcB4OX2ERoA3omuD5NtbIfds=
 cloudeng.io/net v0.0.0-20240326195459-e2c53ed6771a/go.mod h1:1MmRGFc96u3Ml+XNlnsq/Pjmu5XwDxXi9zvkKpkTPlk=
+cloudeng.io/net v0.0.0-20240522031305-dfb750a2120a h1:4fjnVsL2U/E7a7/tpVRmDW0yqj/4INn0CuaiBApmNCc=
+cloudeng.io/net v0.0.0-20240522031305-dfb750a2120a/go.mod h1:1MmRGFc96u3Ml+XNlnsq/Pjmu5XwDxXi9zvkKpkTPlk=
 github.com/arran4/golang-ical v0.2.3 h1:C4Vj7+BjJBIrAJhHgi6Ku+XUkQVugRq4re5Cqj5QVdE=
 github.com/arran4/golang-ical v0.2.3/go.mod h1:RqMuPGmwRRwjkb07hmm+JBqcWa1vF1LvVmPtSZN2OhQ=
 github.com/arran4/golang-ical v0.2.4 h1:0/rTXn2qqEekLKec3SzRRy+z7pCLtniMb0KD/dPogUo=
@@ -38,6 +40,8 @@ github.com/arran4/golang-ical v0.2.7 h1:VO7YlVaGupZE15aj6NhUhte/MIfZuoIzkoI71VsG
 github.com/arran4/golang-ical v0.2.7/go.mod h1:RqMuPGmwRRwjkb07hmm+JBqcWa1vF1LvVmPtSZN2OhQ=
 github.com/arran4/golang-ical v0.2.8 h1:8lsFcfQqzg0gBpIxq7fWr4RV+8SVENLMXpSic5xsFUs=
 github.com/arran4/golang-ical v0.2.8/go.mod h1:RqMuPGmwRRwjkb07hmm+JBqcWa1vF1LvVmPtSZN2OhQ=
+github.com/arran4/golang-ical v0.3.0 h1:QsH5giiitaAtK0zZTPA0hyTGuoFLYa+f+j9LsGOlvgk=
+github.com/arran4/golang-ical v0.3.0/go.mod h1:LZWxF8ZIu/sjBVUCV0udiVPrQAgq3V0aa0RfbO99Qkk=
 github.com/beorn7/perks v1.0.1 h1:VlbKKnNfV8bJzeqoa4cOKqO6bYr3WgKZxO8Z16+hsOM=
 github.com/beorn7/perks v1.0.1/go.mod h1:G2ZrVWU2WbWT9wwq4/hrbKbnv/1ERSJQ0ibhJ6rlkpw=
 github.com/cespare/xxhash/v2 v2.2.0 h1:DC2CZ1Ep5Y4k3ZQ899DldepgrayRUGE6BBZ/cd9Cj44=
@@ -51,6 +55,7 @@ github.com/google/go-cmp v0.4.0/go.mod h1:v8dTdLbMG2kIc/vJvl+f65V22dbkXbowE6jgT/
 github.com/google/go-cmp v0.5.5/go.mod h1:v8dTdLbMG2kIc/vJvl+f65V22dbkXbowE6jgT/gNBxE=
 github.com/google/go-cmp v0.5.9 h1:O2Tfq5qg4qc4AmwVlvv0oLiVAGB7enBSJ2x2DqQFi38=
 github.com/google/go-cmp v0.5.9/go.mod h1:17dUlkBOakJ0+DkrSSNjCkIjxS6bF9zb3elmeNGIjoY=
+github.com/google/go-cmp v0.6.0/go.mod h1:17dUlkBOakJ0+DkrSSNjCkIjxS6bF9zb3elmeNGIjoY=
 github.com/kr/pty v1.1.1/go.mod h1:pFQYn66WHrOpPYNljwOMqo10TkYh1fy3cYio2l3bCsQ=
 github.com/kr/text v0.1.0/go.mod h1:4Jbv+DJW3UT/LiOwJeYQe1efqtUx/iVham/4vfdArNI=
 github.com/kr/text v0.2.0/go.mod h1:eLer722TekiGuMkidMxC/pM04lWEeraHUUmBw8l2grE=
