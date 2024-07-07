@@ -28,6 +28,8 @@ jobs:
         run: go build
       - name: Generate README.md
         run: R -q -e 'knitr::knit("README.Rmd")'
+      - name: Remove binary
+        run: rm ./ical-converter
       - uses: actions/upload-artifact@v4
         with:
           path: ${{ github.workspace }}
