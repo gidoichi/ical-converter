@@ -16,7 +16,7 @@ jobs:
     needs: checkout
     runs-on: ubuntu-latest
     container:
-      image: gidoichi/r-rmd:v4.4.0-xpectr
+      image: gidoichi/r-rmd:v4.4.1-xpectr
     steps:
       - uses: actions/download-artifact@v4
         with:
@@ -24,6 +24,8 @@ jobs:
       - uses: actions/setup-go@v5
         with:
           go-version-file: go.mod
+      - name: Build binary
+        run: go build
       - name: Generate README.md
         run: R -q -e 'knitr::knit("README.Rmd")'
       - uses: actions/upload-artifact@v4
