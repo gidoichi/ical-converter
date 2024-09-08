@@ -5,7 +5,7 @@ go 1.22.2
 require (
 	cloudeng.io/net v0.0.0-20240522031305-dfb750a2120a
 	github.com/arran4/golang-ical v0.3.1
-	github.com/prometheus/client_golang v1.20.0
+	github.com/prometheus/client_golang v1.20.3
 	go.lsp.dev/uri v0.3.0
 	go.uber.org/mock v0.4.0
 )
