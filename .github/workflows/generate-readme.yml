@@ -51,7 +51,7 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           name: generate
-      - uses: peter-evans/create-pull-request@v6
+      - uses: peter-evans/create-pull-request@v7
         with:
           branch: create-pull-request/patch/gendocs
           commit-message: "[skip ci] [create-pull-request] automated change"
