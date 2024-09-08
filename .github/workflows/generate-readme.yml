@@ -11,6 +11,7 @@ jobs:
         with:
           path: ${{ github.workspace }}
           name: checkout
+          include-hidden-files: true
 
   generate:
     needs: checkout
