@@ -35,6 +35,7 @@ jobs:
         with:
           path: ${{ github.workspace }}
           name: generate
+          include-hidden-files: true
 
   no-diff:
     needs: generate
