@@ -35,7 +35,7 @@ func parseMetadata(todo component.Todo, tz time.Location) (*metadata, error) {
 	}
 
 	raw := prop.Value
-	content := strings.TrimSuffix(strings.TrimPrefix(raw, "<2Do Meta>"), "</2Do Meta>\\n")
+	content := strings.TrimSuffix(strings.TrimPrefix(raw, "<2Do Meta>"), "</2Do Meta>\n")
 	content, err := url.QueryUnescape(content)
 	if err != nil {
 		return nil, fmt.Errorf("failed to unescape percent-encoding: %w", err)
@@ -43,7 +43,7 @@ func parseMetadata(todo component.Todo, tz time.Location) (*metadata, error) {
 
 	var parsed metadata
 	if err := json.Unmarshal([]byte(content), &parsed); err != nil {
-		return nil, fmt.Errorf("failed to unmarshall json: %w", err)
+		return nil, fmt.Errorf("failed to unmarshal json: %w", err)
 	}
 
 	parsed.timeZone = tz
@@ -66,5 +66,6 @@ func (m metadata) getStartTime() (*time.Time, error) {
 	// The startDate registered by 2Do is in the local time zone, not UTC.
 	unix := time.Unix(*m.StartDate, 0)
 	t, err := time.ParseInLocation(time.DateTime, unix.UTC().Format(time.DateTime), &m.timeZone)
+	fmt.Println("TIME: ", t)
 	return &t, err
 }

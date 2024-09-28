@@ -12,7 +12,7 @@
       "matchPackagePatterns": [".*"],
       "automerge": true,
       "recreateWhen": "always",
-      "commitMessagePrefix": "[automerged]",
+      "commitMessagePrefix": "[update:patch]",
       "commitMessageExtra": null
     }
   ]

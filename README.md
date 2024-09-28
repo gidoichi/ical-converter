@@ -54,10 +54,10 @@ END:VCALENDAR
 
 ## Configuration
 ### Environment variables
-| NAME                   | DESCRIPTION                   |
-|------------------------|-------------------------------|
-| PORT                   | Lisning requests on this port |
-| ICAL_CONVERTER_ICS_URL | Remote ical file server       |
+| NAME                   | DEFAULT | REQUIRED | DESCRIPTION                                                       |
+|------------------------|---------|----------|-------------------------------------------------------------------|
+| PORT                   | 80      |          | Lisning requests on this port                                     |
+| ICAL_CONVERTER_ICS_URL |         | required | Remote ical file server. Supported schemes are http, https, file. |
 
 ## Detailed conversion rule
 iCalendar is converted following three times.

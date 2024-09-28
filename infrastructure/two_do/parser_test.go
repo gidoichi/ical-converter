@@ -64,7 +64,7 @@ func TestTwoDoRepositoryCallingGetICalParsesSuccessfullyWhenComponentHas2DoMetad
 				{BaseProperty: ical.BaseProperty{
 					IANAToken:      "X-2DOAPP-METADATA",
 					ICalParameters: map[string][]string{"SHARE-SCOPE": {"GLOBAL"}},
-					Value:          "<2Do Meta>%7B%22RecurrenceValue%22%3A0%2C%22RecurrenceEndRepetitionsOrig%22%3A0%2C%22StartDate%22%3A1688601600%2C%22RecurrenceEndRepetitions%22%3A0%2C%22TaskType%22%3A0%2C%22TaskDuration%22%3A0%2C%22RecurrenceType%22%3A0%2C%22StartDayDelay%22%3A0%2C%22isExpandedToShowChildProjects%22%3A0%2C%22IsStarred%22%3A0%2C%22RecurrenceFrom%22%3A0%2C%22RecurrenceEndType%22%3A0%2C%22actionType%22%3A9%2C%22RUID%22%3A%22%22%2C%22actionValue%22%3A%22http%3A%5C%2F%5C%2Fexample.com%5C%2Fpub%5C%2Fcalendars%5C%2Fjsmith%5C%2Fmytime.ics%22%2C%22DisplayOrder%22%3A0%7D</2Do Meta>\\n",
+					Value:          "<2Do Meta>%7B%22RecurrenceValue%22%3A0%2C%22RecurrenceEndRepetitionsOrig%22%3A0%2C%22StartDate%22%3A1688601600%2C%22RecurrenceEndRepetitions%22%3A0%2C%22TaskType%22%3A0%2C%22TaskDuration%22%3A0%2C%22RecurrenceType%22%3A0%2C%22StartDayDelay%22%3A0%2C%22isExpandedToShowChildProjects%22%3A0%2C%22IsStarred%22%3A0%2C%22RecurrenceFrom%22%3A0%2C%22RecurrenceEndType%22%3A0%2C%22actionType%22%3A9%2C%22RUID%22%3A%22%22%2C%22actionValue%22%3A%22http%3A%5C%2F%5C%2Fexample.com%5C%2Fpub%5C%2Fcalendars%5C%2Fjsmith%5C%2Fmytime.ics%22%2C%22DisplayOrder%22%3A0%7D</2Do Meta>\n",
 				}},
 			}}},
 		},
@@ -126,7 +126,7 @@ func TestTwoDoRepositoryCallingGetICalParsesSuccessfullyWhenComponentHas2DoMetad
 				{BaseProperty: ical.BaseProperty{
 					IANAToken:      "X-2DOAPP-METADATA",
 					ICalParameters: map[string][]string{"SHARE-SCOPE": {"GLOBAL"}},
-					Value:          "<2Do Meta>%7B%22RecurrenceValue%22%3A0%2C%22RecurrenceEndRepetitionsOrig%22%3A0%2C%22RecurrenceEndRepetitions%22%3A0%2C%22TaskType%22%3A0%2C%22TaskDuration%22%3A0%2C%22RecurrenceType%22%3A0%2C%22StartDayDelay%22%3A0%2C%22isExpandedToShowChildProjects%22%3A0%2C%22IsStarred%22%3A0%2C%22RecurrenceFrom%22%3A0%2C%22RecurrenceEndType%22%3A0%2C%22RUID%22%3A%22%22%2C%22DisplayOrder%22%3A0%7D</2Do Meta>\\n",
+					Value:          "<2Do Meta>%7B%22RecurrenceValue%22%3A0%2C%22RecurrenceEndRepetitionsOrig%22%3A0%2C%22RecurrenceEndRepetitions%22%3A0%2C%22TaskType%22%3A0%2C%22TaskDuration%22%3A0%2C%22RecurrenceType%22%3A0%2C%22StartDayDelay%22%3A0%2C%22isExpandedToShowChildProjects%22%3A0%2C%22IsStarred%22%3A0%2C%22RecurrenceFrom%22%3A0%2C%22RecurrenceEndType%22%3A0%2C%22RUID%22%3A%22%22%2C%22DisplayOrder%22%3A0%7D</2Do Meta>\n",
 				}},
 			}}},
 		},
@@ -172,7 +172,7 @@ func TestTwoDoRepositoryCallingGetICalParsesSuccessfullyWhenComponentIsNotAllDay
 				{BaseProperty: ical.BaseProperty{
 					IANAToken:      "X-2DOAPP-METADATA",
 					ICalParameters: map[string][]string{"SHARE-SCOPE": {"GLOBAL"}},
-					Value:          "<2Do Meta>%7B%22RecurrenceValue%22%3A0%2C%22RecurrenceEndRepetitionsOrig%22%3A0%2C%22StartDate%22%3A1705161600%2C%22RecurrenceEndRepetitions%22%3A0%2C%22TaskType%22%3A0%2C%22TaskDuration%22%3A0%2C%22RecurrenceType%22%3A0%2C%22StartDayDelay%22%3A0%2C%22isExpandedToShowChildProjects%22%3A0%2C%22IsStarred%22%3A0%2C%22RecurrenceFrom%22%3A0%2C%22RecurrenceEndType%22%3A0%2C%22RUID%22%3A%22%22%2C%22DisplayOrder%22%3A0%7D</2Do Meta>\\n",
+					Value:          "<2Do Meta>%7B%22RecurrenceValue%22%3A0%2C%22RecurrenceEndRepetitionsOrig%22%3A0%2C%22StartDate%22%3A1705161600%2C%22RecurrenceEndRepetitions%22%3A0%2C%22TaskType%22%3A0%2C%22TaskDuration%22%3A0%2C%22RecurrenceType%22%3A0%2C%22StartDayDelay%22%3A0%2C%22isExpandedToShowChildProjects%22%3A0%2C%22IsStarred%22%3A0%2C%22RecurrenceFrom%22%3A0%2C%22RecurrenceEndType%22%3A0%2C%22RUID%22%3A%22%22%2C%22DisplayOrder%22%3A0%7D</2Do Meta>\n",
 				}},
 			}}},
 		},
@@ -224,7 +224,7 @@ func TestTwoDoRepositoryCallingGetICalRemovesTimeRangeWhenComponentHasParent(t *
 				{BaseProperty: ical.BaseProperty{
 					IANAToken:      "X-2DOAPP-METADATA",
 					ICalParameters: map[string][]string{"SHARE-SCOPE": {"GLOBAL"}},
-					Value:          "<2Do Meta>%7B%7D</2Do Meta>\\n",
+					Value:          "<2Do Meta>%7B%7D</2Do Meta>\n",
 				}},
 				{BaseProperty: ical.BaseProperty{
 					IANAToken: "RELATED-TO",
