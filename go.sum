@@ -30,6 +30,8 @@ cloudeng.io/net v0.0.0-20240326195459-e2c53ed6771a h1:HlrIuxmaypVgR8rrtxpQcB4OX2
 cloudeng.io/net v0.0.0-20240326195459-e2c53ed6771a/go.mod h1:1MmRGFc96u3Ml+XNlnsq/Pjmu5XwDxXi9zvkKpkTPlk=
 cloudeng.io/net v0.0.0-20240522031305-dfb750a2120a h1:4fjnVsL2U/E7a7/tpVRmDW0yqj/4INn0CuaiBApmNCc=
 cloudeng.io/net v0.0.0-20240522031305-dfb750a2120a/go.mod h1:1MmRGFc96u3Ml+XNlnsq/Pjmu5XwDxXi9zvkKpkTPlk=
+cloudeng.io/net v0.0.0-20240927175806-04f12251e843 h1:grwHif9/erXvqHM7H7cH0/q/DkBDkgCkqj8XFeFDV+4=
+cloudeng.io/net v0.0.0-20240927175806-04f12251e843/go.mod h1:DkmDQmZOTPWPpFXlvRSDH2ezh9qKQ6yRfz/dQOFyyJc=
 github.com/arran4/golang-ical v0.2.3 h1:C4Vj7+BjJBIrAJhHgi6Ku+XUkQVugRq4re5Cqj5QVdE=
 github.com/arran4/golang-ical v0.2.3/go.mod h1:RqMuPGmwRRwjkb07hmm+JBqcWa1vF1LvVmPtSZN2OhQ=
 github.com/arran4/golang-ical v0.2.4 h1:0/rTXn2qqEekLKec3SzRRy+z7pCLtniMb0KD/dPogUo=
@@ -82,6 +84,8 @@ github.com/prometheus/client_golang v1.20.0 h1:jBzTZ7B099Rg24tny+qngoynol8LtVYlA
 github.com/prometheus/client_golang v1.20.0/go.mod h1:PIEt8X02hGcP8JWbeHyeZ53Y/jReSnHgO035n//V5WE=
 github.com/prometheus/client_golang v1.20.3 h1:oPksm4K8B+Vt35tUhw6GbSNSgVlVSBH0qELP/7u83l4=
 github.com/prometheus/client_golang v1.20.3/go.mod h1:PIEt8X02hGcP8JWbeHyeZ53Y/jReSnHgO035n//V5WE=
+github.com/prometheus/client_golang v1.20.4 h1:Tgh3Yr67PaOv/uTqloMsCEdeuFTatm5zIq5+qNN23vI=
+github.com/prometheus/client_golang v1.20.4/go.mod h1:PIEt8X02hGcP8JWbeHyeZ53Y/jReSnHgO035n//V5WE=
 github.com/prometheus/client_model v0.5.0 h1:VQw1hfvPvk3Uv6Qf29VrPF32JB6rtbgI6cYPYQjL0Qw=
 github.com/prometheus/client_model v0.5.0/go.mod h1:dTiFglRmd66nLR9Pv9f0mZi7B7fk5Pm3gvsjB5tr+kI=
 github.com/prometheus/client_model v0.6.1 h1:ZKSh/rekM+n3CeS952MLRAdFwIKqeY8b62p8ais2e9E=
