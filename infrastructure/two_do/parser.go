@@ -28,12 +28,15 @@ func (r *twoDoRepository) GetICal(source usecase.DataSource) (cal *ical.Calendar
 	}
 
 	cal = component.NewCalendarFrom(*rawCal)
-	for _, rawTodo := range rawCal.Components {
-		todo := component.Todo{
-			ComponentBase: ical.ComponentBase{
-				Components: rawTodo.SubComponents(),
-				Properties: rawTodo.UnknownPropertiesIANAProperties(),
-			},
+	for _, rawComponent := range rawCal.Components {
+		var todo component.Todo
+
+		switch v := rawComponent.(type) {
+		case *ical.VTodo:
+			todo = component.Todo(*v)
+		default:
+			cal.Components = append(cal.Components, v)
+			continue
 		}
 
 		if metadata, err := parseMetadata(todo, r.timeZone); err == nil && metadata != nil {
