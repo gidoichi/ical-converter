@@ -35,7 +35,9 @@ func parseMetadata(todo component.Todo, tz time.Location) (*metadata, error) {
 	}
 
 	raw := prop.Value
-	content := strings.TrimSuffix(strings.TrimPrefix(raw, "<2Do Meta>"), "</2Do Meta>\n")
+	// Some content has a trailing `\n`, while others don't.
+	content := strings.TrimSuffix(raw, "\n")
+	content = strings.TrimSuffix(strings.TrimPrefix(content, "<2Do Meta>"), "</2Do Meta>")
 	content, err := url.QueryUnescape(content)
 	if err != nil {
 		return nil, fmt.Errorf("failed to unescape percent-encoding: %w", err)
