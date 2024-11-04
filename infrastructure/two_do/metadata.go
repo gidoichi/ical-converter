@@ -66,6 +66,5 @@ func (m metadata) getStartTime() (*time.Time, error) {
 	// The startDate registered by 2Do is in the local time zone, not UTC.
 	unix := time.Unix(*m.StartDate, 0)
 	t, err := time.ParseInLocation(time.DateTime, unix.UTC().Format(time.DateTime), &m.timeZone)
-	fmt.Println("TIME: ", t)
 	return &t, err
 }
