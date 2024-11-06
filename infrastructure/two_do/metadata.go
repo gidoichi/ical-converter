@@ -64,6 +64,10 @@ func (m metadata) getStartTime() (*time.Time, error) {
 	if m.StartDate == nil {
 		return nil, nil
 	}
+	// When startDate is equal to 0 it means that the task has no start date, not that the start date is 1990-01-01.
+	if *m.StartDate == 0 {
+		return nil, nil
+	}
 
 	// The startDate registered by 2Do is in the local time zone, not UTC.
 	unix := time.Unix(*m.StartDate, 0)
