@@ -1,12 +1,12 @@
 package two_do
 
 import (
-	"fmt"
-	"log"
+	"errors"
 	"time"
 
 	ical "github.com/arran4/golang-ical"
 	"github.com/gidoichi/ical-converter/entity/component"
+	eerror "github.com/gidoichi/ical-converter/entity/error"
 	"github.com/gidoichi/ical-converter/entity/valuetype"
 	"github.com/gidoichi/ical-converter/usecase"
 )
@@ -28,6 +28,7 @@ func (r *twoDoRepository) GetICal(source usecase.DataSource) (cal *ical.Calendar
 	}
 
 	cal = component.NewCalendarFrom(*rawCal)
+	var errs error
 	for _, rawComponent := range rawCal.Components {
 		var todo component.Todo
 
@@ -59,7 +60,7 @@ func (r *twoDoRepository) GetICal(source usecase.DataSource) (cal *ical.Calendar
 				todo.RemoveProperty(ical.ComponentPropertyDue)
 			}
 		} else if err != nil {
-			log.Println(fmt.Errorf("failed to parse metadata: %w", err))
+			errs = errors.Join(errs, err)
 		}
 
 		for _, targetProp := range []ical.Property{
@@ -86,5 +87,9 @@ func (r *twoDoRepository) GetICal(source usecase.DataSource) (cal *ical.Calendar
 		cal.Components = append(cal.Components, &todo.VTodo)
 	}
 
-	return cal, nil
+	if errs != nil {
+		return cal, eerror.NewComponentsError(errs)
+	} else {
+		return cal, nil
+	}
 }

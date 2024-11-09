@@ -3,10 +3,12 @@ package usecase
 
 import (
 	"fmt"
+	"log"
 	"reflect"
 
 	ical "github.com/arran4/golang-ical"
 	"github.com/gidoichi/ical-converter/entity/component"
+	eerror "github.com/gidoichi/ical-converter/entity/error"
 )
 
 type Converter interface {
@@ -25,7 +27,11 @@ func NewConverter(repository Repository) converter {
 
 func (c *converter) Convert(source DataSource) (converted *ical.Calendar, err error) {
 	cal, err := c.repository.GetICal(source)
-	if err != nil {
+	switch err.(type) {
+	case nil:
+	case *eerror.ComponentsError:
+		log.Printf("failed to get ical: %v", err)
+	default:
 		return nil, err
 	}
 
