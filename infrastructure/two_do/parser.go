@@ -33,7 +33,9 @@ func (r *twoDoRepository) GetICal(source usecase.DataSource) (cal *ical.Calendar
 
 		switch v := rawComponent.(type) {
 		case *ical.VTodo:
-			todo = component.Todo(*v)
+			todo = component.Todo{
+				VTodo: *v,
+			}
 		default:
 			cal.Components = append(cal.Components, v)
 			continue
@@ -81,7 +83,7 @@ func (r *twoDoRepository) GetICal(source usecase.DataSource) (cal *ical.Calendar
 				todo.SetProperty(ical.ComponentProperty(targetProp), prop.Value, params...)
 			}
 		}
-		cal.Components = append(cal.Components, (*ical.VTodo)(&todo))
+		cal.Components = append(cal.Components, &todo.VTodo)
 	}
 
 	return cal, nil

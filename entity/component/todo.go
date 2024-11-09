@@ -5,7 +5,9 @@ import (
 	"github.com/gidoichi/ical-converter/entity/valuetype"
 )
 
-type Todo ical.VTodo
+type Todo struct {
+	ical.VTodo
+}
 
 func (e *Todo) SetDateProperty(name ical.ComponentProperty, value valuetype.Date) {
 	e.SetProperty(name, value.String(), &ical.KeyValues{
