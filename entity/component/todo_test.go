@@ -46,14 +46,14 @@ func TestTodoCanSetDateTimeProperty(t *testing.T) {
 
 func TestTodoCanRemoveProperty(t *testing.T) {
 	// Given
-	todo := component.Todo(
-		ical.VTodo{ComponentBase: ical.ComponentBase{Properties: []ical.IANAProperty{
+	todo := component.Todo{
+		VTodo: ical.VTodo{ComponentBase: ical.ComponentBase{Properties: []ical.IANAProperty{
 			{BaseProperty: ical.BaseProperty{
 				IANAToken: "DTSTART",
 				Value:     "20060102T150405Z",
 			}},
 		}}},
-	)
+	}
 
 	// When
 	todo.RemoveProperty(ical.ComponentPropertyDtStart)

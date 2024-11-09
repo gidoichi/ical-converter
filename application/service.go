@@ -28,8 +28,11 @@ func (s *convertService) Convert(dataSource usecase.DataSource) (string, error) 
 	newCal := component.NewCalendarFrom(*cal)
 	for _, event := range cal.Components {
 		var vevent *ical.VEvent
-		var ok bool
-		if vevent, ok = event.(*ical.VEvent); !ok {
+
+		switch v := event.(type) {
+		case *ical.VEvent:
+			vevent = v
+		default:
 			log.Printf("unexpected component type: %s", reflect.TypeOf(event))
 			continue
 		}
