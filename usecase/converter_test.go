@@ -80,7 +80,7 @@ func TestConverterCanConvertVtodoToVevent(t *testing.T) {
 	}
 }
 
-func TestConverterCanConvertVtimezoneIdentically(t *testing.T) {
+func TestConverterDropsVtimezone(t *testing.T) {
 	// Given
 
 	ctrl := gomock.NewController(t)
@@ -110,21 +110,8 @@ func TestConverterCanConvertVtimezoneIdentically(t *testing.T) {
 	if err != nil {
 		t.Errorf("unexpected error: %s", err)
 	}
-	if len(cal.Components) != 1 {
+	if len(cal.Components) != 0 {
 		t.Errorf("unexpected calendar: %s", cal.Serialize())
-	}
-	if _, ok := cal.Components[0].(*ical.VTimezone); !ok {
-		t.Errorf("unexpected component type: %s", reflect.TypeOf(cal.Components[0]))
-	}
-
-	if len(cal.Components[0].UnknownPropertiesIANAProperties()) != 1 {
-		t.Errorf("unexpected properties: %s", cal.Serialize())
-	}
-	if cal.Components[0].UnknownPropertiesIANAProperties()[0].IANAToken != "TZID" {
-		t.Errorf("unexpected property: %s", cal.Components[0].UnknownPropertiesIANAProperties()[0].IANAToken)
-	}
-	if cal.Components[0].UnknownPropertiesIANAProperties()[0].Value != "America/New_York" {
-		t.Errorf("unexpected value: %s", cal.Components[0].UnknownPropertiesIANAProperties()[0].Value)
 	}
 }
 

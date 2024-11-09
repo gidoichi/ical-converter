@@ -43,7 +43,6 @@ func (c *converter) Convert(source DataSource) (converted *ical.Calendar, err er
 		case *ical.VTodo:
 			event = c.convertFromTodo(*v)
 		case *ical.VTimezone:
-			converted.AddVTimezone(v)
 			continue
 		default:
 			return nil, fmt.Errorf("component type not supported: %s", reflect.TypeOf(comp))
