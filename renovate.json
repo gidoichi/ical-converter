@@ -16,7 +16,7 @@
       "commitMessagePrefix": "[update:patch]",
       "commitMessageExtra": null,
       "matchPackageNames": [
-        "/.*/"
+        "*"
       ]
     }
   ]
