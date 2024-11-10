@@ -1,10 +1,12 @@
 package usecase_test
 
 import (
+	"errors"
 	"reflect"
 	"testing"
 
 	ical "github.com/arran4/golang-ical"
+	eerror "github.com/gidoichi/ical-converter/entity/error"
 	"github.com/gidoichi/ical-converter/usecase"
 	"github.com/gidoichi/ical-converter/usecase/mock_usecase"
 	"go.uber.org/mock/gomock"
@@ -75,6 +77,62 @@ func TestConverterCanConvertVtodoToVevent(t *testing.T) {
 		default:
 			t.Errorf("unexpected property: %s", comp.IANAToken)
 		}
+	}
+}
+
+func TestConverterDropsVtimezone(t *testing.T) {
+	// Given
+
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+	repository := mock_usecase.NewMockRepository(ctrl)
+	given := ical.Calendar{
+		Components: []ical.Component{
+			&ical.VTimezone{
+				ComponentBase: ical.ComponentBase{
+					Properties: []ical.IANAProperty{
+						{BaseProperty: ical.BaseProperty{IANAToken: "TZID", Value: "America/New_York"}},
+					},
+				},
+			},
+		},
+	}
+	dataSource := mock_usecase.NewMockDataSource(ctrl)
+	repository.EXPECT().GetICal(dataSource).Return(&given, nil)
+	converter := usecase.NewConverter(repository)
+
+	// When
+
+	cal, err := converter.Convert(dataSource)
+
+	// Then
+
+	if err != nil {
+		t.Errorf("unexpected error: %s", err)
+	}
+	if len(cal.Components) != 0 {
+		t.Errorf("unexpected calendar: %s", cal.Serialize())
+	}
+}
+
+func TestConverterConvertsSuccessfullyWhenSomeComponentsHaveErrors(t *testing.T) {
+	// Given
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+	repository := mock_usecase.NewMockRepository(ctrl)
+	given := ical.Calendar{
+		Components: []ical.Component{},
+	}
+	dataSource := mock_usecase.NewMockDataSource(ctrl)
+	repository.EXPECT().GetICal(dataSource).Return(&given, eerror.NewComponentsError(errors.New("error")))
+	converter := usecase.NewConverter(repository)
+
+	// When
+	_, err := converter.Convert(dataSource)
+
+	// Then
+	if err != nil {
+		t.Errorf("unexpected error: %s", err)
 	}
 }
 

@@ -79,8 +79,6 @@ func (s *Server) Run() {
 }
 
 func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	log.Printf("%+v", r)
-
 	var dataSource usecase.DataSource
 	switch s.scheme {
 	case uri.HTTPScheme, uri.HTTPSScheme:

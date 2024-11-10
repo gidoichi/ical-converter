@@ -21,12 +21,12 @@ func NewFileICalDataSource(path string) usecase.DataSource {
 func (d fileICalDataSource) GetICal() (*ical.Calendar, error) {
 	file, err := os.Open(d.path)
 	if err != nil {
-		return nil, fmt.Errorf("failed to open file: %w", err)
+		return nil, fmt.Errorf("open file: %w", err)
 	}
 
 	cal, err := ical.ParseCalendar(file)
 	if err != nil {
-		return nil, fmt.Errorf("failed to parse calendar: %w", err)
+		return nil, fmt.Errorf("parse calendar: %w", err)
 	}
 
 	return cal, nil
