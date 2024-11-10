@@ -40,12 +40,12 @@ func parseMetadata(todo component.Todo, tz time.Location) (*metadata, error) {
 	content = strings.TrimSuffix(strings.TrimPrefix(content, "<2Do Meta>"), "</2Do Meta>")
 	content, err := url.QueryUnescape(content)
 	if err != nil {
-		return nil, fmt.Errorf("failed to unescape percent-encoding: %w", err)
+		return nil, fmt.Errorf("unescape percent-encoding: %w", err)
 	}
 
 	var parsed metadata
 	if err := json.Unmarshal([]byte(content), &parsed); err != nil {
-		return nil, fmt.Errorf("failed to unmarshal json: %w", err)
+		return nil, fmt.Errorf("unmarshal json: %w", err)
 	}
 
 	parsed.timeZone = tz

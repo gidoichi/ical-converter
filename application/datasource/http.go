@@ -30,16 +30,16 @@ func (d httpICalDataSource) GetICal() (*ical.Calendar, error) {
 		client := &http.Client{}
 		req, err := http.NewRequest("GET", d.url, nil)
 		if err != nil {
-			return nil, fmt.Errorf("failed to create request: %w", err)
+			return nil, fmt.Errorf("create request: %w", err)
 		}
 		req.SetBasicAuth(d.basicAuthUsername, d.basicAuthPassword)
 		if resp, err = client.Do(req); err != nil {
-			return nil, fmt.Errorf("failed to get ical: %w", err)
+			return nil, fmt.Errorf("get ical: %w", err)
 		}
 	} else {
 		var err error
 		if resp, err = http.Get(d.url); err != nil {
-			return nil, fmt.Errorf("failed to get ical: %w", err)
+			return nil, fmt.Errorf("get ical: %w", err)
 		}
 	}
 	defer resp.Body.Close()
@@ -51,11 +51,11 @@ func (d httpICalDataSource) GetICal() (*ical.Calendar, error) {
 		}
 	}
 	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("failed to get ical: status code %d", resp.StatusCode)
+		return nil, fmt.Errorf("get ical: status code %d", resp.StatusCode)
 	}
 	cal, err := ical.ParseCalendar(resp.Body)
 	if err != nil {
-		return nil, fmt.Errorf("failed to parse calendar: %w", err)
+		return nil, fmt.Errorf("parse calendar: %w", err)
 	}
 
 	return cal, nil
