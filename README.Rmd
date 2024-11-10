@@ -58,9 +58,12 @@ END:VCALENDAR
 iCalendar is converted following three times.
 
 ### Non-Standard Properties
-| SERVICE                        | PARSER                           |
-|--------------------------------|----------------------------------|
-| [2Do](https://www.2doapp.com/) | [two_do](/infrastructure/two_do) |
+| SERVICE    | PARSER           |
+|------------|------------------|
+| [2Do][2Do] | [two_do][two_do] |
+
+[2Do]: https://www.2doapp.com/
+[two_do]: /infrastructure/two_do
 
 ### Scheduled components
 [converter](/usecase/converter.go)
