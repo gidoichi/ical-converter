@@ -25,6 +25,7 @@ END:VCALENDAR
 is converted to
 
 ```
+Prepended http:// to 'localhost:8080'
 BEGIN:VCALENDAR
 PRODID:-//xyz Corp//NONSGML PDA Calendar Version 1.0//EN
 VERSION:2.0
