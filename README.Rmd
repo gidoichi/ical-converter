@@ -29,7 +29,7 @@ export ICAL_CONVERTER_ICS_URL="file:///$PWD/docs/sample.ics"
 ./ical-converter >/dev/null 2>&1 &
 pid=$!
 sleep 1
-wget --quiet --output-document=- "localhost:$PORT" | tr -d '\r'
+wget --quiet --output-document=- "http://localhost:$PORT" | tr -d '\r'
 kill "$pid"
 ```
 
