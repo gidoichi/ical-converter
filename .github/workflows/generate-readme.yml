@@ -6,8 +6,8 @@ jobs:
   checkout:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/upload-artifact@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           path: ${{ github.workspace }}
           name: checkout
@@ -17,12 +17,12 @@ jobs:
     needs: checkout
     runs-on: ubuntu-latest
     container:
-      image: gidoichi/r-rmd:v4.5.0-xpectr
+      image: gidoichi/r-rmd:v4.5.0-xpectr@sha256:a6399d06e38f05b22512ba4446c8002fe99bb44907524c0c265313282367352a
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
         with:
           name: checkout
-      - uses: actions/setup-go@v5
+      - uses: actions/setup-go@d35c59abb061a4a6fb18e82ac0862c26744d6ab5 # v5
         with:
           go-version-file: go.mod
       - name: Build binary
@@ -31,7 +31,7 @@ jobs:
         run: R -q -e 'knitr::knit("README.Rmd")'
       - name: Remove binary
         run: rm ./ical-converter
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           path: ${{ github.workspace }}
           name: generate
@@ -41,7 +41,7 @@ jobs:
     needs: generate
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
         with:
           name: generate
       - run: git diff --exit-code --color
@@ -51,10 +51,10 @@ jobs:
     if: ${{ failure() && needs.no-diff.result == 'failure' }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
         with:
           name: generate
-      - uses: peter-evans/create-pull-request@v7
+      - uses: peter-evans/create-pull-request@271a8d0340265f705b14b6d32b9829c1cb33d45e # v7
         with:
           branch: create-pull-request/patch/gendocs
           commit-message: "[skip ci] [create-pull-request] automated change"
