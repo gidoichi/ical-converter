@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
-      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+      - uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5
         with:
           path: ${{ github.workspace }}
           name: checkout
@@ -19,7 +19,7 @@ jobs:
     container:
       image: gidoichi/r-rmd:v4.5.0-xpectr@sha256:a6399d06e38f05b22512ba4446c8002fe99bb44907524c0c265313282367352a
     steps:
-      - uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5
+      - uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6
         with:
           name: checkout
       - uses: actions/setup-go@44694675825211faa026b3c33043df3e48a5fa00 # v6
@@ -31,7 +31,7 @@ jobs:
         run: R -q -e 'knitr::knit("README.Rmd")'
       - name: Remove binary
         run: rm ./ical-converter
-      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+      - uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5
         with:
           path: ${{ github.workspace }}
           name: generate
@@ -41,7 +41,7 @@ jobs:
     needs: generate
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5
+      - uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6
         with:
           name: generate
       - run: git diff --exit-code --color
@@ -51,7 +51,7 @@ jobs:
     if: ${{ failure() && needs.no-diff.result == 'failure' }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5
+      - uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6
         with:
           name: generate
       - uses: peter-evans/create-pull-request@271a8d0340265f705b14b6d32b9829c1cb33d45e # v7
