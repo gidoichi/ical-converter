@@ -28,11 +28,6 @@ resource "github_repository" "this" {
   squash_merge_commit_title   = "PR_TITLE"
   pages {
     build_type = "workflow"
-    // unused configuration but diffs are shown without this
-    source {
-      branch = "main"
-      path   = "/"
-    }
   }
 }
 
