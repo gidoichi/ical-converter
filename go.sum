@@ -8,6 +8,8 @@ cloudeng.io/net v0.0.0-20250820215211-e1b65c305908 h1:sBkoSl7vIkOg5KyN8rG7RC8lSc
 cloudeng.io/net v0.0.0-20250820215211-e1b65c305908/go.mod h1:0+Qm28WiD3PSM0koEaJITCYoRDvY/D4usxSjcWXI610=
 cloudeng.io/net v0.0.0-20251108034636-95691c7e9c97 h1:hvCo3Fd5kRTobOKQDwh7KCt3Gifxh2yQrpSBLl1HJ3A=
 cloudeng.io/net v0.0.0-20251108034636-95691c7e9c97/go.mod h1:axC62OVIKFR0L0uamfK8txQDIJbQNqSHOwxxfLYFRRs=
+cloudeng.io/net v0.0.0-20251205034656-051d93980ec7 h1:TEbfYw5b1vg/i5cX8ThmKUc2QIdOfv8e9GpuQJryjMM=
+cloudeng.io/net v0.0.0-20251205034656-051d93980ec7/go.mod h1:axC62OVIKFR0L0uamfK8txQDIJbQNqSHOwxxfLYFRRs=
 github.com/arran4/golang-ical v0.3.2 h1:MGNjcXJFSuCXmYX/RpZhR2HDCYoFuK8vTPFLEdFC3JY=
 github.com/arran4/golang-ical v0.3.2/go.mod h1:xblDGxxIUMWwFZk9dlECUlc1iXNV65LJZOTHLVwu8bo=
 github.com/beorn7/perks v1.0.1 h1:VlbKKnNfV8bJzeqoa4cOKqO6bYr3WgKZxO8Z16+hsOM=
