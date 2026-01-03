@@ -5,7 +5,7 @@ go 1.25
 toolchain go1.25.5
 
 require (
-	cloudeng.io/net v0.0.0-20251230033006-254419a25822
+	cloudeng.io/net v0.0.0-20260103215246-58ebe1762d14
 	github.com/arran4/golang-ical v0.3.2
 	github.com/prometheus/client_golang v1.23.2
 	go.lsp.dev/uri v0.3.0
