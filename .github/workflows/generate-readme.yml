@@ -17,7 +17,7 @@ jobs:
     needs: checkout
     runs-on: ubuntu-latest
     container:
-      image: gidoichi/r-rmd:v4.5.0-xpectr@sha256:a6399d06e38f05b22512ba4446c8002fe99bb44907524c0c265313282367352a
+      image: gidoichi/r-rmd:v4.5.2-xpectr@sha256:9afcb157b5228c4b0708131c79c9b3b6257764dcbf321ee7e1a05035ecc1a537
     steps:
       - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
         with:
