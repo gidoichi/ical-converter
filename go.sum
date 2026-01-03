@@ -10,6 +10,8 @@ cloudeng.io/net v0.0.0-20251108034636-95691c7e9c97 h1:hvCo3Fd5kRTobOKQDwh7KCt3Gi
 cloudeng.io/net v0.0.0-20251108034636-95691c7e9c97/go.mod h1:axC62OVIKFR0L0uamfK8txQDIJbQNqSHOwxxfLYFRRs=
 cloudeng.io/net v0.0.0-20251205034656-051d93980ec7 h1:TEbfYw5b1vg/i5cX8ThmKUc2QIdOfv8e9GpuQJryjMM=
 cloudeng.io/net v0.0.0-20251205034656-051d93980ec7/go.mod h1:axC62OVIKFR0L0uamfK8txQDIJbQNqSHOwxxfLYFRRs=
+cloudeng.io/net v0.0.0-20251230033006-254419a25822 h1:wZv5cV6XxfpZYcyP+EsDoTtHJpM95ERGikG18ZYQrFo=
+cloudeng.io/net v0.0.0-20251230033006-254419a25822/go.mod h1:cTBqrWkiBNQoAkDstxmzYFqXkvHMpOgyK6oE5wQlqSI=
 github.com/arran4/golang-ical v0.3.2 h1:MGNjcXJFSuCXmYX/RpZhR2HDCYoFuK8vTPFLEdFC3JY=
 github.com/arran4/golang-ical v0.3.2/go.mod h1:xblDGxxIUMWwFZk9dlECUlc1iXNV65LJZOTHLVwu8bo=
 github.com/beorn7/perks v1.0.1 h1:VlbKKnNfV8bJzeqoa4cOKqO6bYr3WgKZxO8Z16+hsOM=
@@ -63,6 +65,8 @@ golang.org/x/sys v0.35.0 h1:vz1N37gP5bs89s7He8XuIYXpyY0+QlsKmzipCbUtyxI=
 golang.org/x/sys v0.35.0/go.mod h1:BJP2sWEmIv4KK5OTEluFJCKSidICx8ciO85XgH3Ak8k=
 golang.org/x/sys v0.37.0 h1:fdNQudmxPjkdUTPnLn5mdQv7Zwvbvpaxqs831goi9kQ=
 golang.org/x/sys v0.37.0/go.mod h1:OgkHotnGiDImocRcuBABYBEXf8A9a87e/uXjp9XT3ks=
+golang.org/x/sys v0.39.0 h1:CvCKL8MeisomCi6qNZ+wbb0DN9E5AATixKsvNtMoMFk=
+golang.org/x/sys v0.39.0/go.mod h1:OgkHotnGiDImocRcuBABYBEXf8A9a87e/uXjp9XT3ks=
 golang.org/x/xerrors v0.0.0-20191204190536-9bdfabe68543/go.mod h1:I/5z698sn9Ka8TeJc9MKroUUfqBBauWjQqLJ2OPfmY0=
 google.golang.org/protobuf v1.36.5 h1:tPhr+woSbjfYvY6/GPufUoYizxw1cF/yFoxJ2fmpwlM=
 google.golang.org/protobuf v1.36.5/go.mod h1:9fA7Ob0pmnwhb644+1+CVWFRbNajQ6iRojtC/QF5bRE=
