@@ -11,10 +11,6 @@
   "packageRules": [
     {
       "groupName": "dependencies",
-      "automerge": true,
-      "addLabels": [
-        "automerge"
-      ],
       "recreateWhen": "always",
       "commitMessagePrefix": "[update:patch]",
       "commitMessageExtra": null,
