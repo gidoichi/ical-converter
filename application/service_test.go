@@ -156,6 +156,89 @@ func TestConvertServiceRemovesStatusPropertyFromTentativeOrConfirmedEvents(t *te
 	}
 }
 
+func TestConvertServiceSetsDtendToDtstartWhenDtstartIsMissing(t *testing.T) {
+	// Given
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+	converter := mock_usecase.NewMockConverter(ctrl)
+	given := ical.Calendar{
+		Components: []ical.Component{
+			&ical.VEvent{
+				ComponentBase: ical.ComponentBase{
+					Properties: []ical.IANAProperty{
+						{BaseProperty: ical.BaseProperty{IANAToken: "UID", Value: "1"}},
+						{BaseProperty: ical.BaseProperty{IANAToken: "DTEND", Value: "20060103T150405Z"}},
+					},
+				},
+			},
+		},
+	}
+	dataSource := mock_usecase.NewMockDataSource(ctrl)
+	converter.EXPECT().Convert(dataSource).Return(&given, nil)
+	service := application.NewConvertService(converter)
+
+	// When
+	cal, err := service.Convert(dataSource)
+
+	// Then
+	if err != nil {
+		t.Errorf("unexpected error: %s", err)
+	}
+	expectCal := ical.Calendar{
+		Components: []ical.Component{
+			&ical.VEvent{
+				ComponentBase: ical.ComponentBase{
+					Properties: []ical.IANAProperty{
+						{BaseProperty: ical.BaseProperty{IANAToken: "UID", Value: "1"}},
+						{BaseProperty: ical.BaseProperty{IANAToken: "DTEND", Value: "20060103T150405Z"}},
+						{BaseProperty: ical.BaseProperty{IANAToken: "DTSTART", Value: "20060103T150405Z"}},
+					},
+				},
+			},
+		},
+	}
+	expect := expectCal.Serialize()
+	if cal != expect {
+		t.Errorf("unexpected serialized calendar: %s", cal)
+	}
+}
+
+func TestConvertServiceRemovesComponentsWithoutDtstartAndDtendProperty(t *testing.T) {
+	// Given
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+	converter := mock_usecase.NewMockConverter(ctrl)
+	given := ical.Calendar{
+		Components: []ical.Component{
+			&ical.VEvent{
+				ComponentBase: ical.ComponentBase{
+					Properties: []ical.IANAProperty{
+						{BaseProperty: ical.BaseProperty{IANAToken: "UID", Value: "1"}},
+					},
+				},
+			},
+		},
+	}
+	dataSource := mock_usecase.NewMockDataSource(ctrl)
+	converter.EXPECT().Convert(dataSource).Return(&given, nil)
+	service := application.NewConvertService(converter)
+
+	// When
+	cal, err := service.Convert(dataSource)
+
+	// Then
+	if err != nil {
+		t.Errorf("unexpected error: %s", err)
+	}
+	expectCal := ical.Calendar{
+		Components: []ical.Component{},
+	}
+	expect := expectCal.Serialize()
+	if cal != expect {
+		t.Errorf("unexpected serialized calendar: %s", cal)
+	}
+}
+
 func TestConvertServiceRemovesCancelledAndCompletedEvents(t *testing.T) {
 	// Given
 	ctrl := gomock.NewController(t)
