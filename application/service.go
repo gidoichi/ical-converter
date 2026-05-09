@@ -38,7 +38,11 @@ func (s *convertService) Convert(dataSource usecase.DataSource) (string, error) 
 		}
 
 		if vevent.GetProperty(ical.ComponentPropertyDtStart) == nil {
-			continue
+			dtend := vevent.GetProperty(ical.ComponentPropertyDtEnd)
+			if dtend == nil {
+				continue
+			}
+			vevent.SetProperty(ical.ComponentPropertyDtStart, dtend.Value)
 		}
 
 		if status := vevent.GetProperty(ical.ComponentPropertyStatus); status != nil {
