@@ -1,12 +1,12 @@
 module github.com/gidoichi/ical-converter
 
-go 1.25
+go 1.25.5
 
-toolchain go1.25.5
+toolchain go1.26.3
 
 require (
-	cloudeng.io/net v0.0.0-20260103215246-58ebe1762d14
-	github.com/arran4/golang-ical v0.3.2
+	cloudeng.io/net v0.0.0-20260507011012-5e35122ac3e3
+	github.com/arran4/golang-ical v0.3.5
 	github.com/prometheus/client_golang v1.23.2
 	go.lsp.dev/uri v0.3.0
 	go.uber.org/mock v0.6.0
@@ -20,6 +20,6 @@ require (
 	github.com/prometheus/common v0.66.1 // indirect
 	github.com/prometheus/procfs v0.16.1 // indirect
 	go.yaml.in/yaml/v2 v2.4.2 // indirect
-	golang.org/x/sys v0.39.0 // indirect
+	golang.org/x/sys v0.43.0 // indirect
 	google.golang.org/protobuf v1.36.8 // indirect
 )
