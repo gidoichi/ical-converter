@@ -19,12 +19,14 @@ func DI() *application.Server {
 	if icsURL == "" {
 		log.Fatal("failed to get env: ICAL_CONVERTER_ICS_URL")
 	}
+	icsBasicAuthUser := os.Getenv("ICAL_CONVERTER_ICS_BASIC_AUTH_USER")
+	icsBasicAuthPassword := os.Getenv("ICAL_CONVERTER_ICS_BASIC_AUTH_PASSWORD")
 
 	tz := time.FixedZone("JST", int((+9 * time.Hour).Seconds()))
 	repository := twoDo.NewTwoDoRepository(*tz)
 	converter := usecase.NewConverter(repository)
 	convertService := application.NewConvertService(&converter)
-	server, err := application.NewServer(convertService, icsURL, port)
+	server, err := application.NewServer(convertService, icsURL, icsBasicAuthUser, icsBasicAuthPassword, port)
 	if err != nil {
 		log.Fatal(err)
 	}

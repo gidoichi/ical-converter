@@ -21,13 +21,15 @@ import (
 )
 
 type Server struct {
-	convertService convertService
-	icsURL         string
-	port           string
-	scheme         string
+	convertService      convertService
+	icsURL              string
+	icsBasicAuthUser    string
+	icsBasicAuthPass    string
+	port                string
+	scheme              string
 }
 
-func NewServer(convertService convertService, icsURL, port string) (Server, error) {
+func NewServer(convertService convertService, icsURL, icsBasicAuthUser, icsBasicAuthPass, port string) (Server, error) {
 	location, err := url.Parse(icsURL)
 	if err != nil {
 		return Server{}, fmt.Errorf("failed to parse url: %w", err)
@@ -37,10 +39,12 @@ func NewServer(convertService convertService, icsURL, port string) (Server, erro
 	}
 
 	return Server{
-		convertService: convertService,
-		icsURL:         icsURL,
-		scheme:         location.Scheme,
-		port:           port,
+		convertService:   convertService,
+		icsURL:           icsURL,
+		icsBasicAuthUser: icsBasicAuthUser,
+		icsBasicAuthPass: icsBasicAuthPass,
+		scheme:           location.Scheme,
+		port:             port,
 	}, nil
 }
 
@@ -82,7 +86,10 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	var dataSource usecase.DataSource
 	switch s.scheme {
 	case uri.HTTPScheme, uri.HTTPSScheme:
-		username, password, _ := r.BasicAuth()
+		username, password := s.icsBasicAuthUser, s.icsBasicAuthPass
+		if username == "" {
+			username, password, _ = r.BasicAuth()
+		}
 		dataSource = datasource.NewHTTPICalDataSource(s.icsURL, username, password)
 	case uri.FileScheme:
 		parsed, err := url.Parse(s.icsURL)
