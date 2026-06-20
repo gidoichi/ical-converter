@@ -24,7 +24,7 @@ END:VCALENDAR
 
 is converted to
 ```{sh, echo=FALSE, comment=NA}
-ICAL_CONVERTER_ICS_URL="file:///$PWD/docs/sample.ics" ./ical-converter-cli
+./ical-converter-cli --ics-url="file:///$PWD/docs/sample.ics"
 ```
 
 In this case, todo component is converted to event conponent. And because of due property (DUE) does not exist at vevent property, it converted to date-time end property (DTEND).
