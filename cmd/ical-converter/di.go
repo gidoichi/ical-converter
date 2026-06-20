@@ -1,4 +1,4 @@
-package di
+package main
 
 import (
 	"log"
@@ -10,7 +10,7 @@ import (
 	"github.com/gidoichi/ical-converter/usecase"
 )
 
-func DI() *application.Server {
+func di() *application.Server {
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "80"

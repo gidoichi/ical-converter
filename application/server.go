@@ -34,7 +34,7 @@ func NewServer(convertService convertService, icsURL, icsBasicAuthUser, icsBasic
 	if err != nil {
 		return Server{}, fmt.Errorf("failed to parse url: %w", err)
 	}
-	if !uriSchemeSupported(location.Scheme) {
+	if !uriSchemeServerSupported(location.Scheme) {
 		return Server{}, fmt.Errorf("unsupported scheme: %#v", location.Scheme)
 	}
 
@@ -48,7 +48,7 @@ func NewServer(convertService convertService, icsURL, icsBasicAuthUser, icsBasic
 	}, nil
 }
 
-func uriSchemeSupported(scheme string) bool {
+func uriSchemeServerSupported(scheme string) bool {
 	switch scheme {
 	case uri.HTTPScheme, uri.HTTPSScheme, uri.FileScheme:
 		return true
