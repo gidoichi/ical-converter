@@ -25,17 +25,7 @@ END:VCALENDAR
 is converted to
 
 ```
-BEGIN:VCALENDAR
-PRODID:-//xyz Corp//NONSGML PDA Calendar Version 1.0//EN
-VERSION:2.0
-BEGIN:VEVENT
-UID:uid1@example.com
-DTSTAMP:19960704T120000Z
-DTSTART:19960918T143000Z
-DTEND:19960920T220000Z
-SUMMARY:Networld+Interop Conference
-END:VEVENT
-END:VCALENDAR
+2026/06/20 08:33:26 failed to get env: ICAL_CONVERTER_ICS_URL
 ```
 
 In this case, todo component is converted to event conponent. And because of due property (DUE) does not exist at vevent property, it converted to date-time end property (DTEND).
