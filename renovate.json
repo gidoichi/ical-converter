@@ -11,16 +11,16 @@
   "packageRules": [
     {
       "groupName": "dependencies",
-      "automerge": true,
       "addLabels": [
         "automerge"
       ],
-      "recreateWhen": "always",
-      "commitMessagePrefix": "build(deps):",
+      "automerge": true,
       "commitMessageExtra": null,
+      "commitMessagePrefix": "build(deps):",
       "matchPackageNames": [
         "*"
-      ]
+      ],
+      "recreateWhen": "always"
     }
   ]
 }
