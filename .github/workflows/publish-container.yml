@@ -1,4 +1,4 @@
-name: Publish container image
+name: Publish Container
 on:
   push:
     tags:
@@ -12,13 +12,13 @@ jobs:
     steps:
       - uses: docker/login-action@4907a6ddec9925e35a0a9e82d7399ccc52663121 # v4
         with:
-          username: ${{ vars.DOCKERHUB_USERNAME }}
+          username: gidoichi
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - uses: docker/build-push-action@bcafcacb16a39f128d818304e6c9c0c18556b85f # v7
         id: docker
         with:
           push: true
-          tags: ${{ github.repository }}:${{ github.ref_name }},${{ github.repository }}:latest
+          tags: gidoichi/ical-converter:${{ github.ref_name }},gidoichi/ical-converter:latest
       - id: sha256
         env:
           digest: ${{ steps.docker.outputs.digest }}

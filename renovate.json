@@ -16,7 +16,7 @@
         "automerge"
       ],
       "recreateWhen": "always",
-      "commitMessagePrefix": "[update:patch]",
+      "commitMessagePrefix": "build(deps):",
       "commitMessageExtra": null,
       "matchPackageNames": [
         "*"

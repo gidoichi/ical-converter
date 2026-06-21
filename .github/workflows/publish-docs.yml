@@ -1,4 +1,4 @@
-name: Publish documents
+name: Publish Documents
 on:
   push:
     branches: ["main"]
