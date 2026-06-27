@@ -4,6 +4,7 @@
     "config:best-practices"
   ],
   "branchConcurrentLimit": 0,
+  "commitMessagePrefix": "build(deps):",
   "labels": [
     "dependencies"
   ],
@@ -15,8 +16,6 @@
         "automerge"
       ],
       "automerge": true,
-      "commitMessageExtra": null,
-      "commitMessagePrefix": "build(deps):",
       "matchPackageNames": [
         "*"
       ],
