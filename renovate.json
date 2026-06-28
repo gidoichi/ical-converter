@@ -4,6 +4,7 @@
     "config:best-practices"
   ],
   "branchConcurrentLimit": 0,
+  "commitMessagePrefix": "build(deps):",
   "labels": [
     "dependencies"
   ],
@@ -11,16 +12,14 @@
   "packageRules": [
     {
       "groupName": "dependencies",
-      "automerge": true,
       "addLabels": [
         "automerge"
       ],
-      "recreateWhen": "always",
-      "commitMessagePrefix": "[update:patch]",
-      "commitMessageExtra": null,
+      "automerge": true,
       "matchPackageNames": [
         "*"
-      ]
+      ],
+      "recreateWhen": "always"
     }
   ]
 }

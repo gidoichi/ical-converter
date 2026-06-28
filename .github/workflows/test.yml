@@ -20,3 +20,60 @@ jobs:
         run: go build -v ./...
       - name: Test
         run: go test -v ./...
+
+  checkout:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          path: ${{ github.workspace }}
+          name: checkout
+          include-hidden-files: true
+
+  generate-readme:
+    needs: checkout
+    runs-on: ubuntu-latest
+    container:
+      image: rocker/r-rmd@sha256:983a1020f266a2a86ad1b9798c83bd6440ad40db564f4ddd33484d15c3ce3b44
+    steps:
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
+        with:
+          name: checkout
+      - uses: actions/setup-go@4a3601121dd01d1626a1e23e37211e3254c1c06c # v6
+        with:
+          go-version-file: go.mod
+      - name: Build binary
+        run: go build ./cmd/ical-converter-cli
+      - name: Generate README.md
+        run: R -q -e 'knitr::knit("README.Rmd")'
+      - name: Remove binary
+        run: rm ./ical-converter-cli
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          path: ${{ github.workspace }}
+          name: generate
+          include-hidden-files: true
+
+  readme-updated:
+    needs: generate-readme
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
+        with:
+          name: generate
+      - run: git diff --exit-code --color
+
+  terraform-plan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+      - uses: hashicorp/setup-terraform@5e8dbf3c6d9deaf4193ca7a8fb23f2ac83bb6c85 # v4
+        with:
+          terraform_wrapper: false
+      - run: terraform init
+        working-directory: github
+      - run: terraform plan -detailed-exitcode
+        working-directory: github
+        env:
+          TF_VAR_GITHUB_TOKEN: ${{ secrets.GH_PAT_FOR_TERRAFORM_PLAN }}

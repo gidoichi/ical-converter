@@ -1,0 +1,35 @@
+name: Publish Container
+on:
+  pull_request:
+  workflow_call:
+    inputs:
+      tag:
+        required: false
+        type: string
+  workflow_dispatch:
+    inputs:
+      tag:
+        required: false
+        type: string
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment:
+      name: dockerhub
+      url: https://hub.docker.com/layers/${{ github.repository }}/${{ github.ref_name }}/images/sha256-${{ steps.sha256.outputs.digest }}
+    steps:
+      - uses: docker/login-action@4907a6ddec9925e35a0a9e82d7399ccc52663121 # v4
+        with:
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - uses: docker/build-push-action@bcafcacb16a39f128d818304e6c9c0c18556b85f # v7
+        id: docker
+        with:
+          push: true
+          tags: |
+            ${{ inputs.tag != '' && format('{0}:{1}', github.repository, inputs.tag) || '' }}
+            ${{ github.repository }}:latest
+      - id: sha256
+        env:
+          digest: ${{ steps.docker.outputs.digest }}
+        run: echo "digest=${digest#sha256:}" >> "$GITHUB_OUTPUT"
