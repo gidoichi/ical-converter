@@ -48,4 +48,7 @@ jobs:
       tag: ${{ needs.check.outputs.new-tag }}
 
   docs:
+    permissions:
+      pages: write
+      id-token: write
     uses: ./.github/workflows/publish-docs.yml
