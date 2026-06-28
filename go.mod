@@ -6,7 +6,7 @@ require (
 	cloudeng.io/net v0.0.0-20260626220212-1639cc9226d4
 	github.com/arran4/golang-ical v0.3.5
 	github.com/prometheus/client_golang v1.23.2
-	go.lsp.dev/uri v0.3.0
+	go.lsp.dev/uri v1.0.1
 	go.uber.org/mock v0.6.0
 )
 
