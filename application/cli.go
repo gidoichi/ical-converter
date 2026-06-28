@@ -8,7 +8,6 @@ import (
 
 	"github.com/gidoichi/ical-converter/application/datasource"
 	"github.com/gidoichi/ical-converter/usecase"
-	"go.lsp.dev/uri"
 )
 
 type CLI struct {
@@ -39,7 +38,7 @@ func NewCLI(convertService convertService, icsURL, icsBasicAuthUser, icsBasicAut
 
 func uriSchemeCLISupported(scheme string) bool {
 	switch scheme {
-	case uri.HTTPScheme, uri.HTTPSScheme, uri.FileScheme:
+	case httpScheme, httpsScheme, fileScheme:
 		return true
 	default:
 		return false
@@ -49,10 +48,10 @@ func uriSchemeCLISupported(scheme string) bool {
 func (s *CLI) Run() {
 	var dataSource usecase.DataSource
 	switch s.scheme {
-	case uri.HTTPScheme, uri.HTTPSScheme:
+	case httpScheme, httpsScheme:
 		username, password := s.icsBasicAuthUser, s.icsBasicAuthPass
 		dataSource = datasource.NewHTTPICalDataSource(s.icsURL, username, password)
-	case uri.FileScheme:
+	case fileScheme:
 		parsed, err := url.Parse(s.icsURL)
 		if err != nil {
 			log.Println("failed to parse url: ", err)

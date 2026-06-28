@@ -17,7 +17,12 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
-	"go.lsp.dev/uri"
+)
+
+const (
+	fileScheme = "file"
+	httpScheme = "http"
+	httpsScheme = "https"
 )
 
 type Server struct {
@@ -50,7 +55,7 @@ func NewServer(convertService convertService, icsURL, icsBasicAuthUser, icsBasic
 
 func uriSchemeServerSupported(scheme string) bool {
 	switch scheme {
-	case uri.HTTPScheme, uri.HTTPSScheme, uri.FileScheme:
+	case httpScheme, httpsScheme, fileScheme:
 		return true
 	default:
 		return false
@@ -85,13 +90,13 @@ func (s *Server) Run() {
 func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	var dataSource usecase.DataSource
 	switch s.scheme {
-	case uri.HTTPScheme, uri.HTTPSScheme:
+	case httpScheme, httpsScheme:
 		username, password := s.icsBasicAuthUser, s.icsBasicAuthPass
 		if username == "" {
 			username, password, _ = r.BasicAuth()
 		}
 		dataSource = datasource.NewHTTPICalDataSource(s.icsURL, username, password)
-	case uri.FileScheme:
+	case fileScheme:
 		parsed, err := url.Parse(s.icsURL)
 		if err != nil {
 			log.Println("failed to parse url: ", err)
