@@ -22,7 +22,6 @@ require (
 	github.com/prometheus/common v0.70.1 // indirect
 	github.com/prometheus/procfs v0.21.1 // indirect
 	go.abhg.dev/doc2go v0.12.2 // indirect
-	go.yaml.in/yaml/v2 v2.4.4 // indirect
 	golang.org/x/mod v0.37.0 // indirect
 	golang.org/x/sync v0.22.0 // indirect
 	golang.org/x/sys v0.47.0 // indirect

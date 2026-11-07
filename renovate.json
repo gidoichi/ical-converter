@@ -9,6 +9,10 @@
     "dependencies"
   ],
   "schedule": "* 0 1-7 * 6",
+  "postUpdateOptions": [
+    "gomodTidyAll",
+    "gomodUpdateImportPaths"
+  ],
   "packageRules": [
     {
       "groupName": "dependencies",
